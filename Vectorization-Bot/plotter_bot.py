@@ -99,7 +99,7 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     await update.message.reply_text('Image received. Please hold tight for feedback while I lazily process the image.')
     
-    image_to_json('photo', draw_contours = 2, draw_hatch = 16)
+    await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message)
     
     img = aw.DocumentBuilder(aw.Document()).insert_image('images/photo.svg')
     img.image_data.save('images/vectors.png')
@@ -118,35 +118,35 @@ async def confirmation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
     
     match query.data:
         case 'ul_confirmed':
-            await query.delete_message()
             await update.callback_query.message.reply_text(
                 text = 'Uploading the data, you will be notified on the status of the printing process!\nNB: This is a work in progress'
             )
+            await query.delete_message()
             return WAIT
         case 'ul_denied':
-            await query.delete_message()
             await update.callback_query.message.reply_text(
                 text = 'Do you wish to upload a new picture or cancel the operation?',
                 reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('New picture', callback_data = 'new_pic'), InlineKeyboardButton('Cancel operation', callback_data = 'cancel_op')]])
             )
+            await query.delete_message()
             return CONFIRMATION
         case 'new_pic':
-            await query.delete_message()
             await update.callback_query.message.reply_text(
                 text = 'Upload a picture you wish to have vectorized!'
             )
+            await query.delete_message()
             return UPLOAD
         case 'cancel_op':
-            await query.delete_message()
             await update.callback_query.message.reply_text(
                 text = 'Canceling the operation..'
             )
+            await query.delete_message()
             return WAIT
         case _:
-            await query.delete_message()
             await update.callback_query.message.reply_text(
                 text = 'There has been an issue with your request.'
             )
+            await query.delete_message()
             return WAIT
 
 if __name__ == "__main__":

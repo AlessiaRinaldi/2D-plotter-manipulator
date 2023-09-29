@@ -1,3 +1,4 @@
+from telegram import Message
 from random import *
 import math
 import json
@@ -23,16 +24,20 @@ except:
 # -------------- output functions --------------
 
 
-def image_to_json(
+async def image_to_json(
     image_filename,
     resolution=1024,
     draw_contours=False,
     repeat_contours=1,
     draw_hatch=False,
     repeat_hatch=1,
+    message: Message = None
 ):
 
-    lines = vectorise(
+    global msg
+    msg = message
+    
+    lines = await vectorise(
         image_filename,
         resolution,
         draw_contours,
@@ -42,10 +47,11 @@ def image_to_json(
     )
 
     filename = json_folder + image_filename + ".json"
-    lines_to_file(lines, filename)
+    await lines_to_file(lines, filename)
 
 
-def makesvg(lines):
+async def makesvg(lines):
+    await msg.reply_text('Generating svg file...')
     print("Generating svg file...")
     width = math.ceil(max([max([p[0] * 0.5 for p in l]) for l in lines]))
     height = math.ceil(max([max([p[1] * 0.5 for p in l]) for l in lines]))
@@ -62,7 +68,7 @@ def makesvg(lines):
 
 
 # we can use turtle graphics to visualise how a set of lines will be drawn
-def draw(lines):
+async def draw(lines):
     from tkinter import Tk, LEFT
     from turtle import Canvas, RawTurtle, TurtleScreen
 
@@ -91,7 +97,7 @@ def draw(lines):
 # -------------- conversion control --------------
 
 
-def vectorise(
+async def vectorise(
     image_filename,
     resolution=1024,
     draw_contours=False,
@@ -126,32 +132,33 @@ def vectorise(
     lines = []
 
     if draw_contours and repeat_contours:
-        contours = getcontours(resize_image(image, resolution, draw_contours), draw_contours)
-        contours = sortlines(contours)
-        contours = join_lines(contours)
+        contours = await getcontours(await resize_image(image, resolution, draw_contours), draw_contours)
+        contours = await sortlines(contours)
+        contours = await join_lines(contours)
         for r in range(repeat_contours):
             lines += contours
 
     if draw_hatch and repeat_hatch:
-        hatches = hatch(resize_image(image, resolution), line_spacing=draw_hatch)
-        hatches = sortlines(hatches)
-        hatches = join_lines(hatches)
+        hatches = await hatch(await resize_image(image, resolution), line_spacing=draw_hatch)
+        hatches = await sortlines(hatches)
+        hatches = await join_lines(hatches)
         for r in range(repeat_hatch):
             lines += hatches
 
     segments = 0
     for line in lines:
         segments = segments + len(line) - 1
+    await msg.reply_text(f'{len(lines)} lines, {segments} segments.')
     print(len(lines), "lines,", segments, "segments.")
 
     f = open(svg_folder + image_filename + ".svg", "w")
-    f.write(makesvg(lines))
+    f.write(await makesvg(lines))
     f.close()
 
     return lines
 
 
-def resize_image(image, resolution, divider=1):
+async def resize_image(image, resolution, divider=1):
     return image.resize(
         (
             int(resolution / divider),
@@ -163,15 +170,16 @@ def resize_image(image, resolution, divider=1):
 # -------------- vectorisation options --------------
 
 
-def getcontours(image, draw_contours=2):
+async def getcontours(image, draw_contours=2):
+    await msg.reply_text('Generating contours...')
     print("Generating contours...")
-    image = find_edges(image)
+    image = await find_edges(image)
     IM1 = image.copy()
     IM2 = image.rotate(-90, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
-    dots1 = getdots(IM1)
-    contours1 = connectdots(dots1)
-    dots2 = getdots(IM2)
-    contours2 = connectdots(dots2)
+    dots1 = await getdots(IM1)
+    contours1 = await connectdots(dots1)
+    dots2 = await getdots(IM2)
+    contours2 = await connectdots(dots2)
 
     for i in range(len(contours2)):
         contours2[i] = [(c[1], c[0]) for c in contours2[i]]
@@ -180,7 +188,7 @@ def getcontours(image, draw_contours=2):
     for i in range(len(contours)):
         for j in range(len(contours)):
             if len(contours[i]) > 0 and len(contours[j]) > 0:
-                if distsum(contours[j][0], contours[i][-1]) < 8:
+                if await distsum(contours[j][0], contours[i][-1]) < 8:
                     contours[i] = contours[i] + contours[j]
                     contours[j] = []
 
@@ -201,20 +209,20 @@ SE = (1, 1)
 NE = (1, -1)
 
 
-def hatch(image, line_spacing=16):
+async def hatch(image, line_spacing=16):
     lines = []
 
-    lines.extend(get_lines(image, "y", E, line_spacing, 160))
-    lines.extend(get_lines(image, "x", S, line_spacing, 80))
-    lines.extend(get_lines(image, "y", SE, line_spacing, 40))
-    lines.extend(get_lines(image, "x", SE, line_spacing, 40))
-    lines.extend(get_lines(image, "y", NE, line_spacing, 20))
-    lines.extend(get_lines(image, "x", NE, line_spacing, 20))
+    lines.extend(await get_lines(image, "y", E, line_spacing, 160))
+    lines.extend(await get_lines(image, "x", S, line_spacing, 80))
+    lines.extend(await get_lines(image, "y", SE, line_spacing, 40))
+    lines.extend(await get_lines(image, "x", SE, line_spacing, 40))
+    lines.extend(await get_lines(image, "y", NE, line_spacing, 20))
+    lines.extend(await get_lines(image, "x", NE, line_spacing, 20))
 
     return lines
 
 
-def get_lines(image, scan, direction, line_spacing, level):
+async def get_lines(image, scan, direction, line_spacing, level):
     pixels = image.load()
     width, height = image.size[0], image.size[1]
     i_start = j_start = 0
@@ -262,8 +270,8 @@ def get_lines(image, scan, direction, line_spacing, level):
     return lines
 
 
-def join_segments(line_groups):
-
+async def join_segments(line_groups):
+    await msg.reply_text('Making segments into lines...')
     print("Making segments into lines...")
 
     for line_group in line_groups:
@@ -292,11 +300,12 @@ def join_segments(line_groups):
 # -------------- supporting functions for drawing contours --------------
 
 
-def find_edges(image):
+async def find_edges(image):
+    await msg.reply_text('Finding edges...')
     print("Finding edges...")
     if no_cv:
         # appmask(IM,[F_Blur])
-        appmask(image, [F_SobelX, F_SobelY])
+        await appmask(image, [F_SobelX, F_SobelY])
     else:
         im = np.array(image)
         im = cv2.GaussianBlur(im, (3, 3), 0)
@@ -305,7 +314,8 @@ def find_edges(image):
     return image.point(lambda p: p > 128 and 255)
 
 
-def getdots(IM):
+async def getdots(IM):
+    await msg.reply_text('Getting contour points...')
     print("Getting contour points...")
     PX = IM.load()
     dots = []
@@ -325,7 +335,8 @@ def getdots(IM):
     return dots
 
 
-def connectdots(dots):
+async def connectdots(dots):
+    await msg.reply_text('Connecting contour points...')
     print("Connecting contour points...")
     contours = []
     for y in range(len(dots)):
@@ -366,15 +377,16 @@ def connectdots(dots):
 # -------------- optimisation for pen movement --------------
 
 
-def sortlines(lines):
+async def sortlines(lines):
+    await msg.reply_text('Optimising line sequence...')
     print("Optimising line sequence...")
     clines = lines[:]
     slines = [clines.pop(0)]
     while clines != []:
         x, s, r = None, 1000000, False
         for l in clines:
-            d = distsum(l[0], slines[-1][-1])
-            dr = distsum(l[-1], slines[-1][-1])
+            d = await distsum(l[0], slines[-1][-1])
+            dr = await distsum(l[-1], slines[-1][-1])
             if d < s:
                 x, s, r = l[:], d, False
             if dr < s:
@@ -387,7 +399,7 @@ def sortlines(lines):
     return slines
 
 
-def join_lines(lines, closeness=128):
+async def join_lines(lines, closeness=128):
     # When the start of a new line is close to the end of the previous one, make
     # them one line - this reduces pen up-and-down movement. "Close" means no
     # further away than twice the draw_hatch/draw_contours values.
@@ -411,13 +423,14 @@ def join_lines(lines, closeness=128):
                 new_lines.append(line)
                 previous_line = line
 
+    await msg.reply_text(f"Reduced {len(lines)} lines to {len(new_lines)} lines.")
     print(f"Reduced {len(lines)} lines to {len(new_lines)} lines.")
     lines = new_lines
 
     return lines
 
 
-def lines_to_file(lines, filename):
+async def lines_to_file(lines, filename):
     with open(filename, "w") as file_to_save:
         json.dump(lines, file_to_save, indent=4)
 
@@ -425,7 +438,7 @@ def lines_to_file(lines, filename):
 # -------------- helper functions --------------
 
 
-def midpt(*args):
+async def midpt(*args):
     xs, ys = 0, 0
     for p in args:
         xs += p[0]
@@ -433,7 +446,7 @@ def midpt(*args):
     return xs / len(args), ys / len(args)
 
 
-def distsum(*args):
+async def distsum(*args):
     return sum(
         [
             ((args[i][0] - args[i - 1][0]) ** 2 + (args[i][1] - args[i - 1][1]) ** 2) ** 0.5
@@ -445,7 +458,7 @@ def distsum(*args):
 # -------------- code used when open CV is not available  --------------
 
 
-def appmask(IM, masks):
+async def appmask(IM, masks):
     PX = IM.load()
     w, h = IM.size
     NPX = {}
