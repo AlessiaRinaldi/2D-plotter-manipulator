@@ -17,7 +17,7 @@ from telegram.ext import ContextTypes, Application, CommandHandler, MessageHandl
 
 
 Username: Final = '@pen_plotter_bot'
-Token: Final = '6617301227:AAGX9f5d5BvC66KXAy0_EKVXuuOltDIiJtQ' 
+Token: Final = 'TOKEN' 
 Ohearn = ['https://media.tenor.com/IX3oamddJ9cAAAAC/starwell-baby-don%27t-hurt-me.gif',
           'https://media.tenor.com/GUhnxCpzr78AAAAC/mike-ohearn-baby-dont-hurt-me.gif',
           'https://media.tenor.com/gfz3LnymsS4AAAAd/baby-dont-hurt-me-meme.gif',
