@@ -82,15 +82,21 @@ The outcome is a manipulator akin to a human arm, with its end-effector capable 
 
 For visual clarification, refer to the accompanying image:
 
-<div align = "center"> <img src = "readme/photo1.jpg" alt = "Logo" width = "500"> </div>
+<div align = "center"> <img src = "readme/photo1.jpg" alt = "Frame01" width = "500"> </div>
 
 The third servo serves to raise and lower the attached pen:
 
-<div align = "center"> <img src = "readme/photo2.jpg" alt = "Logo" width = "650" height = ""> </div>
+<div align = "center"> <img src = "readme/photo2.jpg" alt = "Frame2" width = "650" height = ""> </div>
 
 ### Telegram Bot
 
+Our interface of choice for users looking to convert their chosen image into a drawing is a `Telegram bot`. Upon receiving the user's selected image, our it initiates a structured sequence of Computer Vision algorithms. It systematically begins with a grayscale conversion, followed by Canny edge detection for precise boundary identification. Subsequently, a Gaussian blur is applied for image smoothing, and a Sobel operator to enhance edge definition.
 
+These algorithms work alongside contouring techniques shaping distinct forms and structures within the image. Line sorting is then employed to organize the details. The outcome is a meticulously processed, vectorized image prepared for submission to the microcontroller. Throughout this process, the Telegram bot provides real-time updates on the processing status, and furthermore submits the vectorized image to the user for confirmation.
+
+We've included a visual representation of the state machine to make things clearer:
+
+<div align = "center"> <img src = "readme/photo3.jpg" alt = "StateMachine" width = "450" height = ""> </div>
 
 <p align="right">( <a href="#top">back to top</a> )</p>
 
