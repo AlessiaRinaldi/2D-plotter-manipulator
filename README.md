@@ -104,9 +104,9 @@ We've included a visual representation of the state machine to make things clear
 <!-- Working Organization -->
 TODO: write as a proper english text
 The entire group started to think about the main idea of the project from the beginning of the course, until the 2D pen plotter was chosen. In the next weeks there was no individual work, every decision about the project was decided from all of us. Then the works was splitted up and the first main organization decided is:
-- Angelo Nutu works on the image processing and setting up the telegram bot ![more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/Vectorization-Bot/README.md)
-- Alessia Rinaldi works on the serial communication between Raspberry and the MSP432 ![more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
-- Leonardo Pasquato works on the 3D structure and the MSP432 attuation of the motors ![more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes).
+- Angelo Nutu works on the image processing and setting up the telegram bot [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/Vectorization-Bot/README.md)
+- Alessia Rinaldi works on the serial communication between Raspberry and the MSP432 [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
+- Leonardo Pasquato works on the 3D structure and the MSP432 attuation of the motors [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes).
 All of three of us works on the telegram-bot.
 
 <!-- ROADMAP -->
