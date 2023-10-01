@@ -96,7 +96,7 @@ These algorithms work alongside contouring techniques shaping distinct forms and
 
 We've included a visual representation of the state machine to make things clearer:
 
-<div align = "center"> <img src = "readme/photo3.jpg" alt = "StateMachine" width = "450" height = ""> </div>
+<div align = "center"> <img src = "readme/msf.png" alt = "StateMachine" width = "" height = ""> </div>
 
 <p align="right">( <a href="#top">back to top</a> )</p>
 
