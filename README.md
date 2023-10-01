@@ -11,7 +11,7 @@
   <p align = "center">
     A Computer-Vision-based IoT robotic arm with pen plotting functionalities
     <br />
-    <a href="https://youtu.be/dQw4w9WgXcQ?si=npVwkW-gNgec-lmm"><strong>Watch the demo »</strong></a>
+    <a href="https://www.youtube.com/watch?v=2bIokQEKmMY"><strong>Watch the demo »</strong></a>
     <br />
     <br />
     <h6>
@@ -37,6 +37,7 @@
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="working-organization">Working Organization</a></li>
   </ol>
 </details>
 
@@ -100,6 +101,14 @@ We've included a visual representation of the state machine to make things clear
 
 <p align="right">( <a href="#top">back to top</a> )</p>
 
+<!-- Working Organization -->
+TODO: write as a proper english text
+The entire group started to think about the main idea of the project from the beginning of the course, until the 2D pen plotter was chosen. In the next weeks there was no individual work, every decision about the project was decided from all of us. Then the works was splitted up and the first main organization decided is:
+- Angelo Nutu works on the image processing and setting up the telegram bot ![more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/Vectorization-Bot/README.md)
+- Alessia Rinaldi works on the serial communication between Raspberry and the MSP432 ![more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
+- Leonardo Pasquato works on the 3D structure and the MSP432 attuation of the motors ![more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes).
+All of three of us works on the telegram-bot.
+
 <!-- ROADMAP -->
 ## Roadmap
 
@@ -111,6 +120,7 @@ We've included a visual representation of the state machine to make things clear
     - [ ] Serial connection between microcontroller and wi-fi module
     - [ ] Math implementation
     - [ ] Motor PWM definition
+- [ ] Working organization
 
 <p align="right">( <a href="#top">back to top</a> )</p>
 
