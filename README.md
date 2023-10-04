@@ -46,11 +46,15 @@
 <!-- Overview -->
 ## Overview
 
-This project revolves around transforming digital images into computer-crafted printed drawings. Users are prompted to effortlessly upload their desired images to our <a href = "https://web.telegram.org/k/#@pen_plotter_bot">Telegram bot</a>, which proceeds to carry out a vectorization process, resulting in a comprehensive `JSON` file containing vectors.
+This project revolves around transforming digital images into computer-crafted printed drawings. 
 
 In contrast to the conventional Cartesian structure commonly found in 3D printers, our apparatus is fashioned in the likeness of a human arm, introducing a distinctive approach to the process.
 
-Following the image vectorization process, a text document will detail the exact positions determined to be followed by the manipulator, which, once interpreted by the `MSP432 microcontroller`, will be computed into motor angles necessary to carry out the movement.
+Users are prompted to effortlessly upload their desired images to our <a href = "https://web.telegram.org/k/#@pen_plotter_bot">Telegram bot</a>, which proceeds to carry out a vectorization process, resulting in a comprehensive `JSON` file containing vectors.
+Following the image vectorization process, the `JSON` document will detail the exact positions determined to be followed by the manipulator. This document will be available in the Raspberry pi Zero memory and a serial communication between the `Raspberry` and the `MSP432` will enable the line-to-line interpretation of the file by the second one. Then the `MSP432` will compute the motor angles starting by the positions read and will actuate them to carry out the movement
+
+<!--Following the image vectorization process, a text document will detail the exact positions determined to be followed by the manipulator, which, once interpreted by the `MSP432 microcontroller`, will be computed into motor angles necessary to carry out the movement.
+-->
 
 <p align="right">(<a href="#top"> back to top </a>)</p>
 
