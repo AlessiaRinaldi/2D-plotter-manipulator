@@ -1,4 +1,3 @@
-
 <a name="top"></a>
 
 <!-- LOGO -->
@@ -37,7 +36,7 @@
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="working-organization">Working Organization</a></li>
+    <li><a href="#work-organization">Work Organization</a></li>
   </ol>
 </details>
 
@@ -101,17 +100,20 @@ These algorithms work alongside contouring techniques shaping distinct forms and
 
 We've included a visual representation of the state machine to make things clearer:
 
-<div align = "center"> <img src = "readme/msf.png" alt = "StateMachine" width = "" height = ""> </div>
+**TBD**
 
-<p align="right">( <a href="#top">back to top</a> )</p>
+<br/>
 
 <!-- Working Organization -->
-TODO: write as a proper english text
-The entire group started to think about the main idea of the project from the beginning of the course, until the 2D pen plotter was chosen. In the next weeks there was no individual work, every decision about the project was decided from all of us. Then the works was splitted up and the first main organization decided is:
-- Angelo Nutu works on the image processing and setting up the telegram bot [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/Vectorization-Bot/README.md)
-- Alessia Rinaldi works on the serial communication between Raspberry and the MSP432 [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
-- Leonardo Pasquato works on the 3D structure and the MSP432 attuation of the motors [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes).
-All of three of us works on the telegram-bot.
+### Work Organization
+
+The entire group began discussions on the project's core concept starting from the outset of the course, eventually settling on the designing and manfacturing of the 2D pen plotter. Over the subsequent weeks, individual work was precluded, and all decisions related to the project were made collectively. Consequently, tasks were distributed among team members as follows:
+
+- Angelo Nutu assumed responsibility for image processing and setting up the Telegram bot [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/Vectorization-Bot/README.md);
+- Alessia Rinaldi took charge of serial communication between the Raspberry Pi and the MSP432 [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
+- Leonardo Pasquato was tasked with designing the 3D structure and managing motor control attenuation for the MSP432 [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
+
+<p align="right">( <a href="#top">back to top</a> )</p>
 
 <!-- ROADMAP -->
 ## Roadmap
