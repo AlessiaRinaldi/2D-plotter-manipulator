@@ -7,7 +7,7 @@
 
 import logging
 import numpy as np
-import aspose.words as aw
+#import aspose.words as aw
 from random import *
 from linedraw import *
 from io import BytesIO
@@ -17,7 +17,7 @@ from telegram.ext import ContextTypes, Application, CommandHandler, MessageHandl
 
 
 Username: Final = '@pen_plotter_bot'
-Token: Final = 'TOKEN' 
+Token: Final = '6617301227:AAGX9f5d5BvC66KXAy0_EKVXuuOltDIiJtQ' 
 Ohearn = ['https://media.tenor.com/IX3oamddJ9cAAAAC/starwell-baby-don%27t-hurt-me.gif',
           'https://media.tenor.com/GUhnxCpzr78AAAAC/mike-ohearn-baby-dont-hurt-me.gif',
           'https://media.tenor.com/gfz3LnymsS4AAAAd/baby-dont-hurt-me-meme.gif',
@@ -101,10 +101,10 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message)
     
-    img = aw.DocumentBuilder(aw.Document()).insert_image('images/photo.svg')
-    img.image_data.save('images/vectors.png')
+    #img = aw.DocumentBuilder(aw.Document()).insert_image('images/photo.svg')
+    #img.image_data.save('images/vectors.png')
     
-    await update.message.reply_photo(photo = open('images/vectors.png', 'rb'))
+    #await update.message.reply_photo(photo = open('images/vectors.png', 'rb'))
     await update.message.reply_text(
         text = 'The picture has been fully processed. Do you wish to continue with the operation and forward the data?', 
         reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('Yes', callback_data = 'ul_confirmed'), InlineKeyboardButton('No', callback_data = 'ul_denied')]])
@@ -152,11 +152,13 @@ async def confirmation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
 if __name__ == "__main__":
     app = Application.builder().token(Token).build()
     
-    app.add_handler(ConversationHandler(
-        entry_points = [CommandHandler('start', start), MessageHandler(filters.TEXT, restart)],
+# Inserisce il gestore della conversazione nel bot
+
+    app.add_handler(ConversationHandler(                
+        entry_points = [CommandHandler('start', start), MessageHandler(filters.ALL, restart)],
         states = {
             WAIT: [
-                MessageHandler(filters.TEXT & (~filters.COMMAND), mike),
+                MessageHandler(~filters.COMMAND, mike),
                 CommandHandler('upload', upload)
             ],
             UPLOAD: [
