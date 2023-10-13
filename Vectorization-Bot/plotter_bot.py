@@ -1,13 +1,10 @@
 #TODO: add connective functionalities for transmission of vector data
 #      dynamic command utilities
 #      feedback utilities
-#      overall concise subroutine with user friendly interfacement
-#      linedraw feedback to telegram feedback
 #      more to come..
 
 import logging
 import numpy as np
-#import aspose.words as aw
 from random import *
 from linedraw import *
 from io import BytesIO
@@ -89,9 +86,6 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     image = cv2.imdecode(np.frombuffer(BytesIO(obj_file).read(), np.uint8), 1)
     cv2.imwrite('images/photo.png', image)
-    cv2.imshow('Image', image)
-    cv2.waitKey(2000)
-    cv2.destroyAllWindows()
     
     file = None
     obj_file = None
@@ -101,8 +95,6 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message)
     
-    #img = aw.DocumentBuilder(aw.Document()).insert_image('images/photo.svg')
-    #img.image_data.save('images/vectors.png')
     
     #await update.message.reply_photo(photo = open('images/vectors.png', 'rb'))
     await update.message.reply_text(
