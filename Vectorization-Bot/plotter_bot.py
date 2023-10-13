@@ -5,6 +5,7 @@
 
 import logging
 import numpy as np
+import cairosvg as svg
 from random import *
 from linedraw import *
 from io import BytesIO
@@ -81,7 +82,7 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
         text = 'Thank you! I will now start the image processing'
     )
     
-    file = await context.bot.get_file(update.message.photo[-1].file_id)
+    file = await context.bot.get_file(update.message.photo[-3].file_id)
     obj_file = await file.download_as_bytearray()
     
     image = cv2.imdecode(np.frombuffer(BytesIO(obj_file).read(), np.uint8), 1)
@@ -95,8 +96,9 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message)
     
-    
-    #await update.message.reply_photo(photo = open('images/vectors.png', 'rb'))
+    svg.svg2pdf(url = 'images/photo.svg', write_to = 'images/vectors.png')
+
+    await update.message.reply_photo(photo = open('images/vectors.png', 'rb'))
     await update.message.reply_text(
         text = 'The picture has been fully processed. Do you wish to continue with the operation and forward the data?', 
         reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('Yes', callback_data = 'ul_confirmed'), InlineKeyboardButton('No', callback_data = 'ul_denied')]])
