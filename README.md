@@ -33,6 +33,7 @@
       <ul>
         <li><a href="#structure">Structure</a></li>
         <li><a href="#telegram-bot">Telegram Bot</a></li>
+        <li><a href="#how-to-build">How to build</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
@@ -103,6 +104,17 @@ We've included a visual representation of the state machine to make things clear
 **TBD**
 
 <br/>
+
+## How to build
+
+The project is created to run on MSP432 embedded platform, using the Texas Instruments _DriverLib_ in order to work in a little more high-level way.
+
+The MSP432 can be used and coded by the main Texas Instruments IDE, but due to the more confidentiality with Visual Studio Code this project stands thanks to PlatformIO extension. PlatformIO is a open-source extension for Visual Studio Code that allows the user to interface with almost every embedded system. It is usually used to code Arduino without its own IDE, but it is possible to code also STM32 boards or MSP boards.
+
+Using PlatformIO there is the need to include the DriverLib (not the _msp.h_, PlatformIO includes it by itself!), and it's included int the _lib_ folder. In the lib folder there are the sub-folders for every couple composed by header and definition files (.h and .c). Due to this organization, every _#include_ of the DriverLib is edited by removing the path of the sub-libraries, becouse they are all in the same folder.
+
+If you want to use this project you only need to install PlatformIO on you Visual Studio Code, clone this repository and open the project from PlatformIO. It is all concentrated here.
+
 
 <!-- Working Organization -->
 ### Work Organization
