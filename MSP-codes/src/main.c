@@ -1,19 +1,25 @@
 #include "msp.h"
-#include "driverlib.h"
 #include "motors.h"
+#include <driverlib.h>
 #include <stdint.h>
 
+#define SERVO_DUTY_CYCLE_MIN 3200
+#define SERVO_DUTY_CYCLE_MAX 6400
 
 void main(void){
-    init_servo();
+
+    Timer_A_PWMConfig pwmConfig = init_servo();
+
+    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION);
+    __enable_irq();
     
     int i = 0;
     for(i = 0; i < 10000; i++);
 
-    move_servo(angle_2_dutyCycle(45));
+    move_servo(angle_2_dutyCycle(45), pwmConfig);
 
     for(i = 0; i < 10000; i++);
-    move_servo(angle_2_dutyCycle(180));
+    move_servo(angle_2_dutyCycle(180), pwmConfig);
 }
 
 /*

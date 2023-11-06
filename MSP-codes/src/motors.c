@@ -1,14 +1,25 @@
 #include "motors.h"
 #include "stdio.h"
 
-void init_servo(void){
+Timer_A_PWMConfig init_servo(void){
 
-    WDT_A_holdTimer();                                      // stop watchdog timer
-    CS_setDCOFrequency(CS_DCO_FREQUENCY_3);                 // set the DCO to 3MHz
+    Timer_A_PWMConfig pwmConfig = {
+        TIMER_A_CLOCKSOURCE_SMCLK,                                                                          // Use SMCLK as the clock source
+        TIMER_A_CLOCKSOURCE_DIVIDER_1,                                                                      // Clock source divider
+        20000,                                                                                              // PWM period (20 ms)
+        TIMER_A_CAPTURECOMPARE_REGISTER_1,                                                                  // CCR register to be used
+        TIMER_A_OUTPUTMODE_RESET_SET,                                                                       // Reset-Set output mode
+        SERVO_DUTY_CYCLE_MAX                                                                                // Initial duty cycle for the servo (minimum position)
+    };
+
+    WDT_A_holdTimer();                                                                                      // stop watchdog timer
+    CS_setDCOFrequency(CS_DCO_FREQUENCY_3);                                                                 // set the DCO to 3MHz
     CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
     MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION); // set up the gpio pin for the integrate led
+
+    return pwmConfig;
 }
 
 int angle_2_dutyCycle(float angle){
@@ -20,15 +31,8 @@ int angle_2_dutyCycle(float angle){
     return (d + SERVO_DUTY_CYCLE_MIN);
 }
 
-void blink_led(void){
-    if (pwmConfig.dutyCycle > SERVO_DUTY_CYCLE_MIN && pwmConfig.dutyCycle < SERVO_DUTY_CYCLE_MAX) {
-            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN4); // Turn on the integrated LED
-        } else {
-            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN4); // Turn off the integrated LED
-    }
-}
 
-void move_servo(int dutyCycle){
+void move_servo(int dutyCycle, Timer_A_PWMConfig pwmConfig){
     pwmConfig.dutyCycle = dutyCycle;
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
 
