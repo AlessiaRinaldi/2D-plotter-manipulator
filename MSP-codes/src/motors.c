@@ -1,6 +1,8 @@
 #include "motors.h"
 #include "stdio.h"
 
+volatile int servoMoving = 0;
+
 Timer_A_PWMConfig init_servo(void){
 
     Timer_A_PWMConfig pwmConfig = {
@@ -9,8 +11,7 @@ Timer_A_PWMConfig init_servo(void){
         20000,                                                                                              // PWM period (20 ms)
         TIMER_A_CAPTURECOMPARE_REGISTER_1,                                                                  // CCR register to be used
         TIMER_A_OUTPUTMODE_RESET_SET,                                                                       // Reset-Set output mode
-        SERVO_DUTY_CYCLE_MIN,
-        //(SERVO_DUTY_CYCLE_MAX - SERVO_DUTY_CYCLE_MIN) / 2,                                                  // Initial duty cycle for the servo (minimum position)
+        (SERVO_DUTY_CYCLE_MAX - SERVO_DUTY_CYCLE_MIN) / 2,                                                  // Initial duty cycle for the servo (minimum position)
     };
 
     WDT_A_holdTimer();                                                                                      // stop watchdog timer
@@ -35,7 +36,17 @@ int angle_2_dutyCycle(float angle){
 
 void move_servo(int dutyCycle, Timer_A_PWMConfig pwmConfig){
     pwmConfig.dutyCycle = dutyCycle;
+    servoMoving = 1;
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
 
     // TODO: blink led while the servo is moving
+
+    MAP_Timer_A_clearCaptureCompareInterrupt(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_1);
+    MAP_Timer_A_enableCaptureCompareInterrupt(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_1);
+    MAP_Timer_A_startCounter(TIMER_A0_BASE, TIMER_A_UP_MODE);
+}
+
+void servo_timer_interrupt_handler(){
+    servoMoving = 0;
+    MAP_Timer_A_clearCaptureCompareInterrupt(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_1);
 }

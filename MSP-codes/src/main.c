@@ -3,20 +3,34 @@
 #include <driverlib.h>
 #include <stdint.h>
 
+extern volatile int servoMoving;                    // the declaration is in motor.c
+
 void main(void){
 
     Timer_A_PWMConfig pwmConfig = init_servo();
 
-    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION);
+    // MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION);
     __enable_irq();
+
+    move_servo(angle_2_dutyCycle(45), pwmConfig);
+
+    /*
+    while(1){
+        move_servo(angle_2_dutyCycle(45), pwmConfig);
+        while(servoMoving);
+
+        move_servo(angle_2_dutyCycle(180), pwmConfig);
+        while(servoMoving);
+    }
+    */
     
-    int i = 0;
-    //for(i = 0; i < 10000; i++);
 
-    //move_servo(angle_2_dutyCycle(45), pwmConfig);
+    /*
+    move_servo(angle_2_dutyCycle(45), pwmConfig);
 
-    //for(i = 0; i < 10000; i++);
-    //move_servo(angle_2_dutyCycle(180), pwmConfig);
+    for(i = 0; i < 10000; i++);
+    move_servo(angle_2_dutyCycle(180), pwmConfig);
+    */
 }
 
 /*
