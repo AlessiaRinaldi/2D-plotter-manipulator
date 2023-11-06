@@ -46,6 +46,12 @@ void move_servo(int dutyCycle, Timer_A_PWMConfig pwmConfig){
     MAP_Timer_A_startCounter(TIMER_A0_BASE, TIMER_A_UP_MODE);
 }
 
+void stop_servo(Timer_A_PWMConfig pwmConfig){
+    pwmConfig.dutyCycle = 0;
+    Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
+    servoMoving = 0;
+}
+
 void servo_timer_interrupt_handler(){
     servoMoving = 0;
     MAP_Timer_A_clearCaptureCompareInterrupt(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_1);

@@ -12,7 +12,12 @@ void main(void){
     // MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION);
     __enable_irq();
 
+    /*
+    int i;
+    for(i = 0; i < 100000; i++);
+    stop_servo(pwmConfig);
     move_servo(angle_2_dutyCycle(45), pwmConfig);
+    */
 
     /*
     while(1){

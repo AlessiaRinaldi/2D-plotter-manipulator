@@ -15,7 +15,7 @@ Timer_A_PWMConfig init_servo(void);
 int angle_2_dutyCycle(float angle);                                 // converter from degrees angle to duty-cycle
 void blink_led(void);                                               // led blinker when the servo moves
 void move_servo(int dutyCycle, Timer_A_PWMConfig pwmConfig);       // servo actuation
-void servo_timer_interrupt_handler();
+void stop_servo();
 void servo_timer_interrupt_handler(); 
 
 #endif
