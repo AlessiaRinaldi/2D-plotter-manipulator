@@ -1,49 +1,36 @@
 #include "motors.h"
 #include "stdio.h"
 
-void init_timer(void){
+void init_servo(void){
 
-    MAP_WDT_A_holdTimer();                                      // waiting WDT
-    MAP_Interrupt_disableMaster();                              // disabling master interrupts
+    WDT_A_holdTimer();                                      // stop watchdog timer
+    CS_setDCOFrequency(CS_DCO_FREQUENCY_3);                 // set the DCO to 3MHz
+    CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
-    TIMER_A0->CCR[0] = 60000 - 1;                               /* PWM Period (3Mhz/60k=50hz) */
-    TIMER_A0->CCTL[4] = 0xE0;                                   /* CCR4 reset/set mode */
-    TIMER_A0->CTL = 0x0214;                                     /* use SMCLK, count up, clear TA0R register */
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
+    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION); // set up the gpio pin for the integrate led
 }
 
-void move_servo(float angle){
-    if(angle >= 0 && angle <= 180){
-        int duty_cycle = angle / 180 * (7500 - 1500) + 1500;
-        TIMER_A0 -> CCR[4] = duty_cycle;
+int angle_2_dutyCycle(float angle){
+    // dc min = 3200
+    // dc max = 6400
 
-    } else{
-        printf("Wrong angle\n");
-    }
+    // 180 : (max - min) = angle : x
+    int d = angle * (SERVO_DUTY_CYCLE_MAX - SERVO_DUTY_CYCLE_MIN) / 180;
+    return (d + SERVO_DUTY_CYCLE_MIN);
 }
 
-
-/*
-void move_servo(uint16_t dutyCycle){
-    // dutyCycle = SERVO_DUTY_CYCLE_MIN;                      // Starting duty cicle for the servo --> starting position
-    // TODO: check dutycycle validity
-    Timer_A_setCompareValue(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_1, dutyCycle);
-
-    // Here the job starts
-    while (1) {
-        if (dutyCycle > SERVO_DUTY_CYCLE_MIN && dutyCycle < SERVO_DUTY_CYCLE_MAX) {
-            dutyCycle++;
-            Timer_A_setCompareValue(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_1, dutyCycle);
-
-            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+void blink_led(void){
+    if (pwmConfig.dutyCycle > SERVO_DUTY_CYCLE_MIN && pwmConfig.dutyCycle < SERVO_DUTY_CYCLE_MAX) {
+            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN4); // Turn on the integrated LED
         } else {
-            if(dutyCycle >= SERVO_DUTY_CYCLE_MAX){
-                do{
-                    dutyCycle--;
-                    Timer_A_setCompareValue(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_1, dutyCycle);
-                } while(dutyCycle > SERVO_DUTY_CYCLE_MAX);
-            }
-            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
-        }
+            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN4); // Turn off the integrated LED
     }
 }
-*/
+
+void move_servo(int dutyCycle){
+    pwmConfig.dutyCycle = dutyCycle;
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
+
+    // TODO: blink led while the servo is moving
+}

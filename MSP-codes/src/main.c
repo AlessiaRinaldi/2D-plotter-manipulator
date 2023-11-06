@@ -1,106 +1,60 @@
 #include "msp.h"
+#include "driverlib.h"
 #include "motors.h"
-#include "communication.h"
-
 #include <stdint.h>
 
-#include <stdbool.h>
 
-/* Timer_A PWM Configuration Parameter */
-Timer_A_PWMConfig pwmConfig =
-{
-TIMER_A_CLOCKSOURCE_SMCLK,
-TIMER_A_CLOCKSOURCE_DIVIDER_1,
-240000,
-TIMER_A_CAPTURECOMPARE_REGISTER_1,
-TIMER_A_OUTPUTMODE_RESET_SET,
-12000
-};
+void main(void){
+    init_servo();
+    
+    int i = 0;
+    for(i = 0; i < 10000; i++);
 
-int main(void)
-{
-/* Halting the watchdog */
-MAP_WDT_A_holdTimer();
+    move_servo(angle_2_dutyCycle(45));
 
-/* Setting MCLK to REFO at 128Khz for LF mode
-* Setting SMCLK to 64Khz */
-CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_12);
-
-/* Configuring GPIO2.4 as peripheral output for PWM and P6.7 for button
-* interrupt */
-MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4,
-GPIO_PRIMARY_MODULE_FUNCTION);
-MAP_GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P1, GPIO_PIN1);
-MAP_GPIO_clearInterruptFlag(GPIO_PORT_P1, GPIO_PIN1);
-MAP_GPIO_enableInterrupt(GPIO_PORT_P1, GPIO_PIN1);
-
-/* Configuring Timer_A to have a period of approximately 500ms and
-* an initial duty cycle of 10% of that (3200 ticks) */
-MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
-
-/* Enabling interrupts and starting the watchdog timer */
-MAP_Interrupt_enableInterrupt(INT_PORT1);
-MAP_Interrupt_enableSleepOnIsrExit();
-MAP_Interrupt_enableMaster();
-
-/* Sleeping when not in use */
-while (1)
-{
-MAP_PCM_gotoLPM0();
-}
-}
-
-/* Port1 ISR - This ISR will progressively step up the duty cycle of the PWM
-* on a button press
-*/
-void PORT1_IRQHandler(void)
-{
-uint32_t status = MAP_GPIO_getEnabledInterruptStatus(GPIO_PORT_P1);
-MAP_GPIO_clearInterruptFlag(GPIO_PORT_P1, status);
-
-if (status & GPIO_PIN1)
-{
-if(pwmConfig.dutyCycle == 64000)
-pwmConfig.dutyCycle = 32000;
-else
-pwmConfig.dutyCycle += 45000;
-
-MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
-}
+    for(i = 0; i < 10000; i++);
+    move_servo(angle_2_dutyCycle(180));
 }
 
 /*
-const Timer_A_PWMConfig pwmConfig = {
-    TIMER_A_CLOCKSOURCE_SMCLK,
-    TIMER_A_CLOCKSOURCE_DIVIDER_1,
-    SERVO_DUTY_CYCLE_MIN,
-    TIMER_A_CAPTURECOMPARE_REGISTER_1,
-    TIMER_A_OUTPUTMODE_RESET_SET,
-    SERVO_DUTY_CYCLE_MAX
-};
+void main(void) {
+    WDT_A_hold(WDT_A_BASE); // Stop the watchdog timer
 
-void main(void){
-
-    WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;                     // Watchdog timer stop
-
-    CS_setDCOFrequency(3000000);                                    // 3 MHz
+    // Set the system clock
+    CS_setDCOFrequency(CS_DCO_FREQUENCY_3); // Set the DCO to 3 MHz
     CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
-    Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);                 // Configure PWM timer for the servo
-    P2 -> DIR |= BIT4;
-    P2 -> SEL0 |= BIT4;
-    P2 -> SEL1 &= -BIT4;
+    // Configure the PWM Timer for the servo
+    Timer_A_PWMConfig pwmConfig = {
+        TIMER_A_CLOCKSOURCE_SMCLK, // Use SMCLK as the clock source
+        TIMER_A_CLOCKSOURCE_DIVIDER_1, // Clock source divider
+        20000, // PWM period (20 ms)
+        TIMER_A_CAPTURECOMPARE_REGISTER_1, // CCR register to be used
+        TIMER_A_OUTPUTMODE_RESET_SET, // Reset-Set output mode
+        SERVO_DUTY_CYCLE_MIN // Initial duty cycle for the servo (minimum position)
+    };
 
-    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P1, GPIO_PIN6, GPIO_PRIMARY_MODULE_FUNCTION);
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
 
-    __enable_irq();                                                 // Global interrupt enable
+    // Set up the GPIO pin for the integrated LED
+    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION);
 
+    // Enable global interrupts
+    __enable_irq();
 
-    //test
-    move_servo(SERVO_DUTY_CYCLE_MIN);
-}
+    while (1) {
+        // Activate the integrated LED when the servo is moving (other LEDs can be turned off)
+        if (pwmConfig.dutyCycle > SERVO_DUTY_CYCLE_MIN && pwmConfig.dutyCycle < SERVO_DUTY_CYCLE_MAX) {
+            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN4); // Turn on the integrated LED
+        } else {
+            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN4); // Turn off the integrated LED
+        }
 
-void TA0_N_IRQHandler(void) {                                       // Interrupt handler for A0 timer, if there is the need
-    Timer_A_clearCaptureCompareInterrupt(TIMER_A0_BASE, TIMER_A_CAPTURECOMPARE_REGISTER_0);
+        // You can adjust the servo position by changing the duty cycle
+        // For example, to set a new desired position (dutyCycleTarget), use:
+        // pwmConfig.dutyCycle = dutyCycleTarget;
+        // Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
+    }
+
 }
 */
