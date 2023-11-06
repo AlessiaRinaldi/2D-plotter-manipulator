@@ -7,8 +7,8 @@ This file include the header for the management of the Servo motors used for the
 
 #include "msp.h"
 #include <driverlib.h>
-#define SERVO_DUTY_CYCLE_MIN 3200
-#define SERVO_DUTY_CYCLE_MAX 6400
+#define SERVO_DUTY_CYCLE_MIN 600
+#define SERVO_DUTY_CYCLE_MAX 3510
 
 Timer_A_PWMConfig init_servo(void);
 

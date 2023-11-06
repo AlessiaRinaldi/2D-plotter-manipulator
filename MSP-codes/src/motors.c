@@ -9,7 +9,8 @@ Timer_A_PWMConfig init_servo(void){
         20000,                                                                                              // PWM period (20 ms)
         TIMER_A_CAPTURECOMPARE_REGISTER_1,                                                                  // CCR register to be used
         TIMER_A_OUTPUTMODE_RESET_SET,                                                                       // Reset-Set output mode
-        SERVO_DUTY_CYCLE_MAX                                                                                // Initial duty cycle for the servo (minimum position)
+        SERVO_DUTY_CYCLE_MIN,
+        //(SERVO_DUTY_CYCLE_MAX - SERVO_DUTY_CYCLE_MIN) / 2,                                                  // Initial duty cycle for the servo (minimum position)
     };
 
     WDT_A_holdTimer();                                                                                      // stop watchdog timer
