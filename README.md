@@ -105,7 +105,7 @@ We've included a visual representation of the state machine to make things clear
 
 <br/>
 
-## How to build
+## Getting started
 
 The project is created to run on MSP432 embedded platform, using the Texas Instruments _DriverLib_ in order to work in a little more high-level way.
 
@@ -115,6 +115,26 @@ Using PlatformIO there is the need to include the DriverLib (not the _msp.h_, Pl
 
 If you want to use this project you only need to install PlatformIO on you Visual Studio Code, clone this repository and open the project from PlatformIO. It is all concentrated here.
 
+### Files Organization
+```
+├──  3D-structure
+├──  MSP-codes
+|   ├── include
+|   ├── lib
+|   |   └── driverlib
+|   ├── src
+|   |   ├── main.c
+|   |   ├── motors.h
+|   |   ├── motors.c
+|   |   ├── communication.h
+|   |   └── communication.c
+|   └── test
+├── Vectorization-bot
+|   ├── linedraw.py
+|   └── plotter_bot.py
+└── README.md
+
+```
 
 <!-- Working Organization -->
 ### Work Organization
