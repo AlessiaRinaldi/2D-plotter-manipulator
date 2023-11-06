@@ -24,24 +24,14 @@
 </div>
 
 <!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li><a href="#overview">Overview</a></li>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#structure">Structure</a></li>
-        <li><a href="#telegram-bot">Telegram Bot</a></li>
-        <li><a href="#how-to-build">How to build</a></li>
-      </ul>
-    </li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#work-organization">Work Organization</a></li>
-  </ol>
-</details>
-
-
+- [Overview](#overview)
+- [About The Project](#about-the-project)
+  - [Structure](#structure)
+  - [Telegram Bot](#telegram-bot)
+- [Getting started](#getting-started)
+  - [Files Organization](#files-organization)
+  - [Work Organization](#work-organization)
+- [Roadmap](#roadmap)
 
 <!-- Overview -->
 ## Overview
