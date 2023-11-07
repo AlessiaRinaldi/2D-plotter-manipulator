@@ -1,41 +1,31 @@
 #include "msp.h"
 #include "motors.h"
 #include <driverlib.h>
+#include "stdio.h"
 #include <stdint.h>
 
 extern volatile int servoMoving;                    // the declaration is in motor.c
 
 void main(void){
 
+    Interrupt_disableMaster();
+
     Timer_A_PWMConfig pwmConfig = init_servo();
 
-    // MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION);
-    __enable_irq();
-
-    /*
     int i;
-    for(i = 0; i < 100000; i++);
-    stop_servo(pwmConfig);
-    move_servo(angle_2_dutyCycle(45), pwmConfig);
-    */
-
-    /*
-    while(1){
-        move_servo(angle_2_dutyCycle(45), pwmConfig);
-        while(servoMoving);
-
-        move_servo(angle_2_dutyCycle(180), pwmConfig);
-        while(servoMoving);
+    for(i = 0; i < 10000; i++){
+        printf("%d \t", i);
     }
-    */
+
+    if(pwmConfig.dutyCycle >= (SERVO_DUTY_CYCLE_MIN - SERVO_DUTY_CYCLE_MAX) / 2){
+        set_dutycycle(SERVO_DUTY_CYCLE_MIN, pwmConfig);
+        set_servo(pwmConfig);
+    } else{
+        set_dutycycle(SERVO_DUTY_CYCLE_MAX, pwmConfig);
+        set_servo(pwmConfig);
+    }
     
-
-    /*
-    move_servo(angle_2_dutyCycle(45), pwmConfig);
-
-    for(i = 0; i < 10000; i++);
-    move_servo(angle_2_dutyCycle(180), pwmConfig);
-    */
+    __enable_irq();
 }
 
 /*
