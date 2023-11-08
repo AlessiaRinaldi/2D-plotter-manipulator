@@ -4,6 +4,32 @@
 #include "stdio.h"
 #include <stdint.h>
 
+extern Timer_A_PWMConfig pwmConfig;
+
+void main(void){
+    WDT_A_holdTimer(); 
+    // Setting MCLK to REFO at 128Khz for LF mode
+    // Setting SMCLK to 64Khz
+    MAP_CS_setReferenceOscillatorFrequency(CS_REFO_128KHZ);
+    MAP_CS_initClockSignal(CS_MCLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+    MAP_CS_initClockSignal(CS_SMCLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_2);
+    MAP_PCM_setPowerState(PCM_AM_LF_VCORE0);
+
+    // P1.1 for button interrupt
+    MAP_GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P1, GPIO_PIN1);
+    MAP_GPIO_clearInterruptFlag(GPIO_PORT_P1, GPIO_PIN1);
+    MAP_GPIO_enableInterrupt(GPIO_PORT_P1, GPIO_PIN1);
+
+    init_servo();
+
+}
+
+
+
+
+
+/*
+
 extern volatile int servoMoving;                    // the declaration is in motor.c
 
 void main(void){
@@ -28,7 +54,10 @@ void main(void){
     __enable_irq();
 }
 
+*/
+
 /*
+
 void main(void) {
     WDT_A_hold(WDT_A_BASE); // Stop the watchdog timer
 
@@ -70,3 +99,5 @@ void main(void) {
 
 }
 */
+
+
