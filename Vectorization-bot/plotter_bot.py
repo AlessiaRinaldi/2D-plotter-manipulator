@@ -82,28 +82,38 @@ async def reject(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     return UPLOAD
 
-# UPLOAD component - Core component: takes care of all the processing -> CONFIRMATION state
+# UPLOAD component - Core component: Takes care of all the processing -> CONFIRMATION state
 async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await context.bot.send_message(
         chat_id = update.effective_chat.id,
         text = 'Thank you! I will now start the image processing'
     )
     
+    # Gets uploaded image in the third best resolution (hardware optimization reasons)
     file = await context.bot.get_file(update.message.photo[-3].file_id)
+    # Saves in primary memory the image data
     obj_file = await file.download_as_bytearray()
     
+    # Decodes image data in OpenCV format [numpy array with 0 - 255 (8 bits) format channels]
     image = cv2.imdecode(np.frombuffer(BytesIO(obj_file).read(), np.uint8), 1)
+    # Saves image for review and troubleshooting, but also for vectorization, in PNG format
     cv2.imwrite('images/photo.png', image)
     
+    # Frees memory
     file = None
     obj_file = None
     image = None
     
-    await update.message.reply_text('Image received. Please hold tight for feedback while I lazily process the image.')
+    # If image decoding went well up until this point, gives feedback
+    await update.message.reply_text('Image received. Please hold tight for feedback while I process the image.')
     
+    # Image Processing
+    # - 
+    # -
+    # -
     await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message)
     
-    svg.svg2pdf(url = 'images/photo.svg', write_to = 'images/vectors.png')
+    svg.svg2png(url = 'images/photo.svg', write_to = 'images/vectors.png')
 
     await update.message.reply_photo(photo = open('images/vectors.png', 'rb'))
     await update.message.reply_text(
@@ -113,10 +123,12 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     return CONFIRMATION
 
+# CONFIRMATION component: Takes care of conversation flow once image is vectorized -> Dynamically asserted state
 async def confirmation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
     await query.answer()
     
+    # Python 3.10> structure (similar to C switch/case)
     match query.data:
         case 'ul_confirmed':
             await update.callback_query.message.reply_text(
