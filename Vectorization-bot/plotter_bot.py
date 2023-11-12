@@ -28,6 +28,7 @@ logging.basicConfig(
     level = logging.INFO
 )
 
+# Entry point: Starts conversation by simply greeting the user -> WAIT state
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await context.bot.send_message(
         chat_id = update.effective_chat.id,
@@ -36,6 +37,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     return WAIT
 
+# Entry point: Restarts conversation from the start after bot shutdown -> WAIT state
 async def restart(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await context.bot.send_message(
         chat_id = update.effective_chat.id,
@@ -44,6 +46,7 @@ async def restart(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     return WAIT
 
+# Fallback (to change): Cancels the conversation -> WAIT state
 async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await context.bot.send_message(
         chat_id = update.effective_chat.id,
@@ -52,6 +55,7 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     return WAIT
 
+# WAIT component: what is love -> WAIT state
 async def mike(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await context.bot.sendDocument(
         chat_id = update.message.chat_id,
@@ -60,6 +64,7 @@ async def mike(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     return WAIT
 
+# WAIT component: Communicates that the system now waits for a picture -> UPLOAD state
 async def upload(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await context.bot.send_message(
         chat_id = update.effective_chat.id,
@@ -68,6 +73,7 @@ async def upload(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     return UPLOAD
 
+# UPLOAD component: Receives unexpected message (not a picture) and awaits for an image -> UPLOAD state
 async def reject(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await context.bot.send_message(
         chat_id = update.effective_chat.id,
@@ -76,6 +82,7 @@ async def reject(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     return UPLOAD
 
+# UPLOAD component - Core component: takes care of all the processing -> CONFIRMATION state
 async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await context.bot.send_message(
         chat_id = update.effective_chat.id,
