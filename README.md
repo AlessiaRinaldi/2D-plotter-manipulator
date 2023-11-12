@@ -85,7 +85,7 @@ The third servo serves to raise and lower the attached pen:
 
 ### Telegram Bot
 
-Our interface of choice for users looking to convert their chosen image into a drawing is a `Telegram bot`. Upon receiving the user's selected image, our it initiates a structured sequence of Computer Vision algorithms. It systematically begins with a grayscale conversion, followed by Canny edge detection for precise boundary identification. Subsequently, a Gaussian blur is applied for image smoothing, and a Sobel operator to enhance edge definition.
+Our interface of choice for users looking to convert their chosen image into a drawing is a `Telegram bot`. Upon receiving the user's selected image, it initiates a structured sequence of Computer Vision algorithms. It systematically begins with a grayscale conversion, followed by Canny edge detection for precise boundary identification. Subsequently, a Gaussian blur is applied for image smoothing, and a Sobel operator to enhance edge definition.
 
 These algorithms work alongside contouring techniques shaping distinct forms and structures within the image. Line sorting is then employed to organize the details. The outcome is a meticulously processed, vectorized image prepared for submission to the microcontroller. Throughout this process, the Telegram bot provides real-time updates on the processing status, and furthermore submits the vectorized image to the user for confirmation.
 
@@ -97,13 +97,17 @@ We've included a visual representation of the state machine to make things clear
 
 ## Getting started
 
-The project is created to run on MSP432 embedded platform, using the Texas Instruments _DriverLib_ in order to work in a little more high-level way.
+This project is designed for execution on the MSP432 embedded platform, utilizing `Texas Instruments' DriverLib` to operate at a higher abstraction level. While the MSP432 can be programmed using Code Composer Studio, this project has been configured to leverage Visual Studio Code with the `PlatformIO extension` due to more familiarity with the tool.
 
-The MSP432 can be used and coded by the main Texas Instruments IDE, but due to the more confidentiality with Visual Studio Code this project stands thanks to PlatformIO extension. PlatformIO is a open-source extension for Visual Studio Code that allows the user to interface with almost every embedded system. It is usually used to code Arduino without its own IDE, but it is possible to code also STM32 boards or MSP boards.
+PlatformIO is an open-source extension for Visual Studio Code, providing compatibility with a wide range of embedded systems. Although commonly used for Arduino development without its native IDE, it also supports the coding of STM32 and MSP boards.
 
-Using PlatformIO there is the need to include the DriverLib (not the _msp.h_, PlatformIO includes it by itself!), and it's included int the _lib_ folder. In the lib folder there are the sub-folders for every couple composed by header and definition files (.h and .c). Due to this organization, every _#include_ of the DriverLib is edited by removing the path of the sub-libraries, becouse they are all in the same folder.
+To facilitate the integration of the DriverLib into the project, it is included in the _lib_ folder. Within this folder, sub-folders exist for each pair of header and definition files (.h and .c). Consequently, every #include statement for the DriverLib has been modified to exclude the path of the sub-libraries, as they are all housed in the same folder.
 
-If you want to use this project you only need to install PlatformIO on you Visual Studio Code, clone this repository and open the project from PlatformIO. It is all concentrated here.
+To use this project, install PlatformIO on your Visual Studio Code, clone this repository, and open the project from PlatformIO. All the necessary components for the MSP432 board are consolidated here.
+
+An additional element of the project involves the Raspberry Pi 0 W for Human Machine Interaction (HMI). The setup requires the necessary connections for serial communcation between the MSP432 and Raspberry Pi, while it's only required to execute the primary Python script _plotter_bot.py_ to initialize and engage with the Telegram Bot. 
+
+Testing of the platform has been conducted on `Raspbian version 11.0` and later, as well as Ubuntu 22.02 and above. The prerequisites for the runtime environment include a minimum `Python 3.10 version`, and all additional Python package dependencies.
 
 ### Files Organization
 ```
