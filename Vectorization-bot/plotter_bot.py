@@ -144,12 +144,19 @@ async def confirmation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
             return WAIT
 
 if __name__ == "__main__":
+    # Configures application
     app = Application.builder().token(Token).build()
-    
-# Inserisce il gestore della conversazione nel bot
 
-    app.add_handler(ConversationHandler(                
+    # Conversation Handler for application (bot)
+    app.add_handler(ConversationHandler(       
+        # Entry points for conversation
+        # - /start command
+        # - Any message after bot has shutdown         
         entry_points = [CommandHandler('start', start), MessageHandler(filters.ALL, restart)],
+        # Conversation states, handle message transactions
+        # - WAIT: awaits for user to wish to upload the image to vectorize
+        # - UPLOAD: waits for picture to vectorize, rejects anything else
+        # - CONFIRMATION: handles all user confirmation (picture is correct, vectorized image is to their liking, they want to start the drawing process)
         states = {
             WAIT: [
                 MessageHandler(~filters.COMMAND, mike),
@@ -163,7 +170,9 @@ if __name__ == "__main__":
                 CallbackQueryHandler(confirmation)
             ]
         },
+        # Conversation fallbacks, conditions that make the conversation stop TODO: fix
         fallbacks = [CommandHandler('cancel', cancel)]
     ))
     
+    # Starts application
     app.run_polling()
