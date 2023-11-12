@@ -108,13 +108,12 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text('Image received. Please hold tight for feedback while I process the image.')
     
     # Image Processing
-    # - 
-    # -
-    # -
     await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message)
     
+    # Saves svg vectorized image as a png for user feedback 
     svg.svg2png(url = 'images/photo.svg', write_to = 'images/vectors.png')
 
+    # Sends the vectorized image to the user to confirm the drawing
     await update.message.reply_photo(photo = open('images/vectors.png', 'rb'))
     await update.message.reply_text(
         text = 'The picture has been fully processed. Do you wish to continue with the operation and forward the data?', 
@@ -127,40 +126,40 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
 async def confirmation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     query = update.callback_query
     await query.answer()
+    nextState = WAIT
     
     # Python 3.10> structure (similar to C switch/case)
     match query.data:
+        # Work in Progress - User has accepted the image which is gonna be sent to the microcontroller for drawing -> TBD
         case 'ul_confirmed':
             await update.callback_query.message.reply_text(
                 text = 'Uploading the data, you will be notified on the status of the printing process!\nNB: This is a work in progress'
             )
-            await query.delete_message()
-            return WAIT
+        # User refused the image so they're prompted to choose whether they want another image or to cancel the operation -> CONFIRMATION state
         case 'ul_denied':
             await update.callback_query.message.reply_text(
                 text = 'Do you wish to upload a new picture or cancel the operation?',
                 reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton('New picture', callback_data = 'new_pic'), InlineKeyboardButton('Cancel operation', callback_data = 'cancel_op')]])
             )
-            await query.delete_message()
-            return CONFIRMATION
+            nextState = CONFIRMATION
+        # User chooses to upload a new picture -> UPLOAD state
         case 'new_pic':
             await update.callback_query.message.reply_text(
                 text = 'Upload a picture you wish to have vectorized!'
             )
-            await query.delete_message()
-            return UPLOAD
+            nextState = UPLOAD
+        # User chooses to cancel the operation -> WAIT state
         case 'cancel_op':
             await update.callback_query.message.reply_text(
                 text = 'Canceling the operation..'
             )
-            await query.delete_message()
-            return WAIT
+        # Shouldn't occur, but if none of the confirmation transactions happen the system goes back to square one 
         case _:
             await update.callback_query.message.reply_text(
                 text = 'There has been an issue with your request.'
             )
-            await query.delete_message()
-            return WAIT
+    await query.delete_message()
+    return nextState
 
 if __name__ == "__main__":
     # Configures application
