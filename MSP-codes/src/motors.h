@@ -12,15 +12,20 @@ This file include the header for the management of the Servo motors used for the
 #define LINK_1 100
 #define LINK_2 110
 
+/*
+Set 2D point struct
+*/
+
+typedef struct pos_t{
+    uint16_t x;
+    uint16_t y;
+} pos_t;
+
 void init_servo(void);
+uint16_t angle_2_duty(uint16_t angle);                 // inputs: angle --> outputs: duty cycle
+void set_servo(uint16_t duty1, uint16_t duty2);         // inputs: both of the duty cycles
+void set_position(pos_t pos);
 
-int angle_2_dutyCycle(float angle);                                 // converter from degrees angle to duty-cycle
-void blink_led(void);                                               // led blinker when the servo moves
-void set_dutycycle(int dutyCycle, Timer_A_PWMConfig pwmConfig);
-void set_servo(Timer_A_PWMConfig pwmConfig);       // servo actuation
-void servo_timer_interrupt_handler(); 
-void PORT1_IRQHandler(void);
 
-void set_position(uint16_t x, uint16_t y);
 
 #endif
