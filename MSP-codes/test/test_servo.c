@@ -1,92 +1,11 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
- * Copyright (c) 2017, Texas Instruments Incorporated
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * *  Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * *  Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * *  Neither the name of Texas Instruments Incorporated nor the names of
- *    its contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- * --/COPYRIGHT--*/
-/*******************************************************************************
- * MSP432 Timer_A - Variable PWM
- *
- * Original Description: In this example, the Timer_A module is used to create a precision
- * PWM with an adjustable duty cycle. The PWM initial period is 200 ms and is
- * output on P2.4. The initial duty cycle of the PWM is 10%, however when the
- * button is pressed on P1.1 the duty cycle is sequentially increased by 10%.
- * Once the duty cycle reaches 90%, the duty cycle is reset to 10% on the
- * following button press.
- *
- * Second Description: In this program, the Timer_A module is used to create a precision
- * PWM with an adjustable duty cycle from 5% (1ms) to 10% (2ms). The PWM initial period is 20ms
- * and is output on P2.4, P7.7, P5.6, and P10.5. The initial duty cycle of the PWM is 5%, however,
- * when the button is pressed on P1.1 or P1.4, the duty cycle is sequentially increased by 1.25% (2.5ms)
- * Once the duty cycle reaches 10%, the duty cycle is sequentially decreased by 1.25% (2.5ms) per button
- * press until it reaches 5% again.
- * This is the base code for operating 4 motors of a quadcopter.
- *
- * Final Description: In this program, the Timer_A module is used to create a precision
- * PWM with an adjustable duty cycle from 5% (1ms) to 10% (2ms). The PWM initial period is 20ms
- * and is output on P7.7, P7.6, P7.5, and P7.4. The initial duty cycle of the PWM is 5%, however,
- * when the button is pressed on P1.1 or P1.4, the duty cycle is sequentially increased by 1.25% (2.5ms)
- * Once the duty cycle reaches 10%, the duty cycle is sequentially decreased by 1.25% (2.5ms) per button
- * press until it reaches 5% again.
- * This is the base code for operating 4 motors of a quadcopter using only one timer base.
- *
- *
- *
- *
- *                MSP432P401
- *             ------------------
- *         /|\|                  |
- *          | |                  |
- *          --|RST         P1.1  |<--Toggle Switch
- *            |            P1.4  |<--Toggle Switch
- *            |                  |
- *            |            P7.7  |--> Output PWM Timer A1.1
- *            |            P7.6  |--> Output PWM Timer A1.2
- *            |            P7.5  |--> Output PWM Timer A1.3
- *            |            P7.4  |--> Output PWM Timer A1.4
- *            |                  |
- *            |            P1.0  |--> LED Debug indicator
- *            |                  |
- *            |                  |
-* Author: Timothy Logan, Robert Pulatie
- *******************************************************************************/
-// DriverLib Includes
 #include "msp.h"
-#include "driverlib.h"
-// Standard Includes
+//#include "motors.h"
+#include <driverlib.h>
+#include "stdio.h"
+#include "math.h"
 #include <stdint.h>
-
 #include <stdbool.h>
+#include "motors.h"
 
 /*
 
@@ -136,15 +55,7 @@ Timer_A_PWMConfig pwmConfigA1_4 =
 
 
 // Timer_A PWM Configuration Parameter pin 2.4 primary, MOTOR 1 CCW
-Timer_A_PWMConfig pwmConfig0 =
-{
-        TIMER_A_CLOCKSOURCE_SMCLK,
-        TIMER_A_CLOCKSOURCE_DIVIDER_1,
-        1280, // this num/ 64k = period       OG 32000
-        TIMER_A_CAPTURECOMPARE_REGISTER_1,
-        TIMER_A_OUTPUTMODE_RESET_SET,
-        64 // 5% or 1ms duty cycle             OG 3200
-};
+extern Timer_A_PWMConfig pwmConfig0;
 
 /*
 
@@ -163,15 +74,7 @@ Timer_A_PWMConfig pwmConfig1 =
 
 
 // Timer_A2 PWM Configuration Parameter pin 5.6 primary, MOTOR 3 CW
-Timer_A_PWMConfig pwmConfig2 =
-{
-        TIMER_A_CLOCKSOURCE_SMCLK,
-        TIMER_A_CLOCKSOURCE_DIVIDER_1,
-        1280, // this num/ 64k = period       OG 32000
-        TIMER_A_CAPTURECOMPARE_REGISTER_1,
-        TIMER_A_OUTPUTMODE_RESET_SET,
-        64 // 5% or 1ms duty cycle             OG 3200
-};
+extern Timer_A_PWMConfig pwmConfig2;
 
 /*
 
@@ -254,7 +157,7 @@ int main(void)
 
     // OG Configuring Timer_A to have a period of approximately 500ms and an initial duty cycle of 10% of that (3200 ticks)
     // Configuring Timer_A to have a period of approximately 20ms and an initial duty cycle of 5% of that (64 ticks)
-    (TIMER_A0_BASE, &pwmConfig0);
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig0);
 /*    MAP_Timer_A_generatePWM(TIMER_A1_BASE, &pwmConfig1);
 */
     MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwmConfig2);
@@ -273,6 +176,8 @@ int main(void)
         MAP_PCM_gotoLPM0();
     }
 }
+
+
 
 // Port1 ISR - This ISR will progressively step up the duty cycle of the PWM  on a button press
 void PORT1_IRQHandler(void)
@@ -348,10 +253,21 @@ void PORT1_IRQHandler(void)
 
     uint32_t status = MAP_GPIO_getEnabledInterruptStatus(GPIO_PORT_P1);
     MAP_GPIO_clearInterruptFlag(GPIO_PORT_P1, status);
+
     if (status & GPIO_PIN1)
     {
+        /*
+        pos_t tmp = set_position(120, 120);
+        pwmConfig0.dutyCycle = tmp.x;
+        pwmConfig2.dutyCycle = tmp.y;
+
+        MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig0);
+        MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwmConfig2);
+        */
+
+                                                                            
         // TimerA0.1 pin 2.4 Motor 1 CCW
-        if(pwmConfig0.dutyCycle >= 1000) //   10% cycle at 128,           OG 28800 90%
+        if(pwmConfig0.dutyCycle >= 2000) //   10% cycle at 128,           OG 28800 90%
         {
             speedChange = -64;
 //            pwmConfig.dutyCycle += speedChange;
@@ -366,7 +282,29 @@ void PORT1_IRQHandler(void)
         pwmConfig0.dutyCycle += speedChange; //  1.25% increase or 0.25ms 32 for 2.5% or .5ms     OG 3200 10%
 
         MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig0);
+    
+                                                                            
     }
+                                                                            
+
+    if (status & GPIO_PIN4)
+    {
+        // TimerA2.1 pin 5.6 Motor 3 CW
+        if(pwmConfig2.dutyCycle >= 2000) //   10% cycle at 128,           OG 28800 90%
+        {
+            speedChange = -64;
+        }
+        if(pwmConfig2.dutyCycle <= 64) //   5% cycle, 1ms          OG 28800 90%
+        {
+            speedChange = 64;
+        }
+
+        pwmConfig2.dutyCycle += speedChange; //  1.25% increase or 0.25ms 32 for 2.5% or .5ms     OG 3200 10%
+
+        MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwmConfig2);
+    }
+                                                                                                
+
 
 
 /*
@@ -392,21 +330,6 @@ void PORT1_IRQHandler(void)
         for(i=1000; i>0; i--);
     }
 */
-    if (status & GPIO_PIN4)
-    {
-        // TimerA2.1 pin 5.6 Motor 3 CW
-        if(pwmConfig2.dutyCycle == 1000) //   10% cycle at 128,           OG 28800 90%
-        {
-            speedChange = -64;
-        }
-        if(pwmConfig2.dutyCycle == 64) //   5% cycle, 1ms          OG 28800 90%
-        {
-            speedChange = 64;
-        }
-
-        pwmConfig2.dutyCycle += speedChange; //  1.25% increase or 0.25ms 32 for 2.5% or .5ms     OG 3200 10%
-
-        MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwmConfig2);
 
 /*
         // TimerA3.1 pin 10.5 Motor 4 CW
@@ -431,3 +354,113 @@ void PORT1_IRQHandler(void)
      }
 */
 }
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////
+
+
+
+/*
+
+extern Timer_A_PWMConfig pwmConfig;
+
+void main(void){
+    WDT_A_holdTimer(); 
+    // Setting MCLK to REFO at 128Khz for LF mode
+    // Setting SMCLK to 64Khz
+    MAP_CS_setReferenceOscillatorFrequency(CS_REFO_128KHZ);
+    MAP_CS_initClockSignal(CS_MCLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+    MAP_CS_initClockSignal(CS_SMCLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_2);
+    MAP_PCM_setPowerState(PCM_AM_LF_VCORE0);
+
+    // P1.1 for button interrupt
+    MAP_GPIO_setAsInputPinWithPullUpResistor(GPIO_PORT_P1, GPIO_PIN1);
+    MAP_GPIO_clearInterruptFlag(GPIO_PORT_P1, GPIO_PIN1);
+    MAP_GPIO_enableInterrupt(GPIO_PORT_P1, GPIO_PIN1);
+
+    init_servo();
+
+}
+*/
+
+
+
+
+/*
+
+extern volatile int servoMoving;                    // the declaration is in motor.c
+
+void main(void){
+
+    Interrupt_disableMaster();
+
+    Timer_A_PWMConfig pwmConfig = init_servo();
+
+    int i;
+    for(i = 0; i < 10000; i++){
+        printf("%d \t", i);
+    }
+
+    if(pwmConfig.dutyCycle >= (SERVO_DUTY_CYCLE_MIN - SERVO_DUTY_CYCLE_MAX) / 2){
+        set_dutycycle(SERVO_DUTY_CYCLE_MIN, pwmConfig);
+        set_servo(pwmConfig);
+    } else{
+        set_dutycycle(SERVO_DUTY_CYCLE_MAX, pwmConfig);
+        set_servo(pwmConfig);
+    }
+    
+    __enable_irq();
+}
+
+*/
+
+/*
+
+void main(void) {
+    WDT_A_hold(WDT_A_BASE); // Stop the watchdog timer
+
+    // Set the system clock
+    CS_setDCOFrequency(CS_DCO_FREQUENCY_3); // Set the DCO to 3 MHz
+    CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+
+    // Configure the PWM Timer for the servo
+    Timer_A_PWMConfig pwmConfig = {
+        TIMER_A_CLOCKSOURCE_SMCLK, // Use SMCLK as the clock source
+        TIMER_A_CLOCKSOURCE_DIVIDER_1, // Clock source divider
+        20000, // PWM period (20 ms)
+        TIMER_A_CAPTURECOMPARE_REGISTER_1, // CCR register to be used
+        TIMER_A_OUTPUTMODE_RESET_SET, // Reset-Set output mode
+        SERVO_DUTY_CYCLE_MIN // Initial duty cycle for the servo (minimum position)
+    };
+
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
+
+    // Set up the GPIO pin for the integrated LED
+    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4, GPIO_PRIMARY_MODULE_FUNCTION);
+
+    // Enable global interrupts
+    __enable_irq();
+
+    while (1) {
+        // Activate the integrated LED when the servo is moving (other LEDs can be turned off)
+        if (pwmConfig.dutyCycle > SERVO_DUTY_CYCLE_MIN && pwmConfig.dutyCycle < SERVO_DUTY_CYCLE_MAX) {
+            MAP_GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN4); // Turn on the integrated LED
+        } else {
+            MAP_GPIO_setOutputLowOnPin(GPIO_PORT_P2, GPIO_PIN4); // Turn off the integrated LED
+        }
+
+        // You can adjust the servo position by changing the duty cycle
+        // For example, to set a new desired position (dutyCycleTarget), use:
+        // pwmConfig.dutyCycle = dutyCycleTarget;
+        // Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig);
+    }
+
+}
+*/
+

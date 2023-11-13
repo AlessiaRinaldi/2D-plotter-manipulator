@@ -95,6 +95,16 @@ We've included a visual representation of the state machine to make things clear
 
 <br/>
 
+### Communication and actuation
+
+After the image processing, the Telegram bot script saves a `.js` file in the Raspberry memory. Then the file is read by another `python` script, which communicates row by row the file to the MSP432.
+
+The communication between the two boards works via serial and each row contains a vector. So when an message (vector) occurs, the MSP432 drives the motors to the position specified in the vector.
+
+Here is the working FSM that drive the communication between Raspberry and MSP432 and its actuation:
+
+
+
 ## Getting started
 
 This project is designed for execution on the MSP432 embedded platform, utilizing `Texas Instruments' DriverLib` to operate at a higher abstraction level. While the MSP432 can be programmed using Code Composer Studio, this project has been configured to leverage Visual Studio Code with the `PlatformIO extension` due to more familiarity with the tool.
