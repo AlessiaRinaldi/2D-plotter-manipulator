@@ -132,6 +132,8 @@ Testing of the platform has been conducted on `Raspbian version 11.0` and later,
 |   |   ├── motors.c
 |   |   ├── communication.h
 |   |   └── communication.c
+|   |   └── init.h
+|   |   └── init.c
 |   └── test
 ├── Vectorization-bot
 |   ├── linedraw.py
