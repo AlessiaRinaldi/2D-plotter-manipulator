@@ -91,6 +91,9 @@ Timer_A_PWMConfig pwmConfig3 =
 
 */
 
+// Timer_A_UpModeConfig upConfig = {
+// }
+
 
 int main(void)
 {

@@ -22,10 +22,8 @@ typedef struct pos_t{
 } pos_t;
 
 void init_servo(void);
-uint16_t angle_2_duty(uint16_t angle);                 // inputs: angle --> outputs: duty cycle
+uint16_t angle_2_duty(uint16_t angle);                  // inputs: angle --> outputs: duty cycle
 void set_servo(uint16_t duty1, uint16_t duty2);         // inputs: both of the duty cycles
-void set_position(pos_t pos);
-
-
+void set_position(pos_t pos);                           // inputs: position
 
 #endif

@@ -115,6 +115,8 @@ int main(void)
     MAP_GPIO_clearInterruptFlag(GPIO_PORT_P1, GPIO_PIN4);
     MAP_GPIO_enableInterrupt(GPIO_PORT_P1, GPIO_PIN4);
 
+    init_servo();
+
     /*
     // Configuring GPIO 7.7 as peripheral output Timer A1.1 PWM
     // Configuring GPIO 7.6 for Timer A1.2 PWM output
@@ -131,12 +133,9 @@ int main(void)
     // Configuring GPIO 7.7 for Timer A1.1 PWM output
     // Configuring GPIO 5.6 for Timer A2.1 PWM output
     // Configuring GPIO 10.5 as peripheral output TIMER A3.1 for PWM output
-    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4,GPIO_PRIMARY_MODULE_FUNCTION);
 /*
     MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P7, GPIO_PIN7,GPIO_PRIMARY_MODULE_FUNCTION);
-*/
-    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P5, GPIO_PIN6,GPIO_PRIMARY_MODULE_FUNCTION);
-/* 
+*//* 
     MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P10, GPIO_PIN5,GPIO_PRIMARY_MODULE_FUNCTION);
 */
 
@@ -157,13 +156,6 @@ int main(void)
 
     // OG Configuring Timer_A to have a period of approximately 500ms and an initial duty cycle of 10% of that (3200 ticks)
     // Configuring Timer_A to have a period of approximately 20ms and an initial duty cycle of 5% of that (64 ticks)
-    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig0);
-/*    MAP_Timer_A_generatePWM(TIMER_A1_BASE, &pwmConfig1);
-*/
-    MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwmConfig2);
-/*
-    MAP_Timer_A_generatePWM(TIMER_A3_BASE, &pwmConfig3);
-*/
 
     // Enabling interrupts and starting the watchdog timer
     MAP_Interrupt_enableInterrupt(INT_PORT1);
@@ -267,7 +259,7 @@ void PORT1_IRQHandler(void)
 
                                                                             
         // TimerA0.1 pin 2.4 Motor 1 CCW
-        if(pwmConfig0.dutyCycle >= 2000) //   10% cycle at 128,           OG 28800 90%
+        if(pwmConfig0.dutyCycle >= 1000) //   10% cycle at 128,           OG 28800 90%
         {
             speedChange = -64;
 //            pwmConfig.dutyCycle += speedChange;
@@ -282,15 +274,22 @@ void PORT1_IRQHandler(void)
         pwmConfig0.dutyCycle += speedChange; //  1.25% increase or 0.25ms 32 for 2.5% or .5ms     OG 3200 10%
 
         MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwmConfig0);
+
+
+
+        pwmConfig2.dutyCycle += speedChange; //  1.25% increase or 0.25ms 32 for 2.5% or .5ms     OG 3200 10%
+
+        MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwmConfig2);
+
     
                                                                             
     }
                                                                             
-
+/*
     if (status & GPIO_PIN4)
     {
         // TimerA2.1 pin 5.6 Motor 3 CW
-        if(pwmConfig2.dutyCycle >= 2000) //   10% cycle at 128,           OG 28800 90%
+        if(pwmConfig2.dutyCycle >= 1000) //   10% cycle at 128,           OG 28800 90%
         {
             speedChange = -64;
         }
@@ -304,7 +303,7 @@ void PORT1_IRQHandler(void)
         MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwmConfig2);
     }
                                                                                                 
-
+*/
 
 
 /*
