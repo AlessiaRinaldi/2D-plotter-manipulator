@@ -3,7 +3,14 @@
 #include "math.h"
 
 /*
+
+PWM SETUP:
+the pwm pin 2.6 is connected to the third servo, the one that lift and put down the pen;
+the pwm pin 2.4 is connected to the second servo, the elbow;
+the pwm pin 5.6 is connected to the first servo, the fixed shoulder
+
 Set pwmconfig structs
+
 */
 
 Timer_A_CompareModeConfig compareConfig_PWM = {
@@ -23,9 +30,10 @@ const Timer_A_UpModeConfig upConfig = {
 };
 
 /*
-Useful current position counter
+Useful current position counter of the arm and the pen
 */
 pos_t current_position;
+bool past_pen_position;
 
 
 void init_servo(void){
@@ -68,15 +76,48 @@ uint16_t angle_2_duty(uint16_t angle){
     return d;
 }
 
+void set_pen(){
+
+    if(past_pen_position != current_position.pen){
+
+        // update past pen position
+        past_pen_position = current_position.pen;
+
+        if(current_position.pen == true){
+            // the pen must be down
+            compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_3;
+            compareConfig_PWM.compareValue = 500;
+            Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
+
+        } else{
+            // the pen must be high
+            compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_3;
+            compareConfig_PWM.compareValue = 2500;
+            Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
+
+        }
+    }
+}
+
 
 void set_servo(uint16_t duty1, uint16_t duty2){
+
+    set_pen();
 
     /*
     Check duty cycle plausibility
     */   
     if(duty1 >= SERVO_DUTY_CYCLE_MIN && duty1 <= SERVO_DUTY_CYCLE_MAX && duty2 >= SERVO_DUTY_CYCLE_MIN && duty2 <= SERVO_DUTY_CYCLE_MAX){
-        
-        
+
+        // set shoulder
+        compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_1;
+        compareConfig_PWM.compareValue = duty1;
+        Timer_A_initCompare(TIMER_A2_BASE, &compareConfig_PWM);
+
+        // set elbow
+        compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_1;
+        compareConfig_PWM.compareValue = 3000;
+        Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
     } 
 }
 

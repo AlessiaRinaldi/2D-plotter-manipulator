@@ -14,6 +14,7 @@ Set 2D point struct
 typedef struct pos_t{
     uint16_t x;
     uint16_t y;
+    bool pen;
 } pos_t;
 //leggo da rasp e metto in struct
 
