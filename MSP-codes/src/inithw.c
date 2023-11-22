@@ -1,6 +1,9 @@
 #include "inithw.h"
 #include "motors.h"
 #include "communication.h"
+#include "screen.h"
+
+Graphics_Context context;
 
 void inithw(){
     /*
@@ -17,4 +20,5 @@ void inithw(){
     CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
 
     init_servo();
+    init_screen();
 }
