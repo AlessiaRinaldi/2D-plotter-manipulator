@@ -1,9 +1,9 @@
 % 2D PEN PLOTTER MANIPULATOR SIMULATION
 
-l1 = 10;                % length of the first link
-l2 = 11.5;                % length of the second link
+l1 = 10;                        % length of the first link
+l2 = 11.5;                      % length of the second link
 
-theta1 = -pi/2: 0.1: pi/2;    % array declaration with starting point in 0 and final point in pi/2 with a delta of 0.1
+theta1 = 0: 0.1: pi;      % array declaration with starting point in 0 and final point in pi/2 with a delta of 0.1
 theta2 = -pi: 0.1: 0;
 
 [THETA1, THETA2] = meshgrid(theta1, theta2);
