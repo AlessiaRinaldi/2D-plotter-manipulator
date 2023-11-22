@@ -121,12 +121,23 @@ void set_servo(uint16_t duty1, uint16_t duty2){
     } 
 }
 
+uint16_t angle_2_duty(uint16_t angle){
+    // conversion from radians to duty cycle    
+    // pi : (SERVO_DUTY_CYCLE_MAX - SERVO_DUTY_CYCLE_MIN) = angle = x
+
+    uint16_t duty = ((angle * (SERVO_DUTY_CYCLE_MAX - SERVO_DUTY_CYCLE_MIN)) / 3.1415) + SERVO_DUTY_CYCLE_MIN;
+    return duty;
+}
+
 
 void set_position(pos_t pos){
 
     /*
     Obtain angles from 2D points
     */
+
+    current_position = pos;             //check this, maybe it's not the right place
+
     uint16_t x = pos.x;
     uint16_t y = pos.y;
 
@@ -140,12 +151,13 @@ void set_position(pos_t pos){
     uint16_t servo_2_angle = 3.14 - outer_angle;
 
     /*
-    Check on workspace
+    Check on workspace, better than this
     */
     if(hypotenuse < (LINK_1 + LINK_2)){
-        // conversion from radians to degree
-        // conversion from radians to duty cycle
-
+ 
         // set servo
+        uint16_t duty1 = angle_2_duty(servo_1_angle);
+        uint16_t duty2 = angle_2_duty(servo_2_angle);
+        set_servo(duty1, duty2);            // consider set_servo(duty1, duty2, pen); without relying in the global var
     }
 }
