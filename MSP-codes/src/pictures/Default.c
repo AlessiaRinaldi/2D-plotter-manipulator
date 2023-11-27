@@ -132,7 +132,7 @@ static const uint8_t defaultPixels[] = {
 };
 
 static const uint32_t defaultPalette[] = {
-    GRAPHICS_COLOR_BLACK, GRAPHICS_COLOR_GOLDENRON
+    GRAPHICS_COLOR_GOLDENRON, GRAPHICS_COLOR_BLACK
 };
 
 const Graphics_Image Default = {
