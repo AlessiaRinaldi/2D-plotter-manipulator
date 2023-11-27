@@ -1,4 +1,5 @@
 #include <grlib.h>
+#include "screen.h"
 
 static const uint8_t defaultPixels[] = {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 
@@ -132,7 +133,7 @@ static const uint8_t defaultPixels[] = {
 };
 
 static const uint32_t defaultPalette[] = {
-    GRAPHICS_COLOR_GOLDENRON, GRAPHICS_COLOR_BLACK
+    fgColor, bgColor
 };
 
 const Graphics_Image Default = {

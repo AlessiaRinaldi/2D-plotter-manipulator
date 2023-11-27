@@ -1,12 +1,6 @@
 #include "screen.h"
 #include "pictures/images.h"
 
-// Screen context used for all feedback
-Graphics_Context context; 
-const Graphics_Font *font = &g_sFontCmss14b;
-const uint32_t bgColor = 0x00000000;
-const uint32_t fgColor = 0x00DAA520;
-
 void init_screen(void){
 
     // Initialize screen SPI communication
@@ -23,13 +17,9 @@ void init_screen(void){
     // Background Color for any untouched pixel
     // Font for text design - currently set to Cmss 14px Bold
     */ 
-    Graphics_setForegroundColor(&context, GRAPHICS_COLOR_GOLDENRON);
-    Graphics_setBackgroundColor(&context, GRAPHICS_COLOR_BLACK);
-    Graphics_setFont(&context, font);
-
-    // Make sure nothing is cached for display
-    Graphics_clearDisplay(&context);
-    Graphics_flushBuffer(&context);
+    Graphics_setForegroundColor(&context, fgColor);
+    Graphics_setBackgroundColor(&context, bgColor);
+    Graphics_setFont(&context, &font);
 
     /*
     // Bound to be removed, for testing of font / colors / proportions
@@ -37,7 +27,34 @@ void init_screen(void){
     Graphics_drawStringCentered(&context, (int8_t *) "Inter Arma 123", AUTO_STRING_LENGTH, 64, 64 + (int32_t) Graphics_getFontHeight(font) / 2, OPAQUE_TEXT);
     */
 
-   // Draws default booting image
-   Graphics_drawImage(&context, &Default, 0, 0);
+   drawDefault();
 
+}
+
+void drawDefault(void){
+    // Make sure nothing is cached for display
+    Graphics_clearDisplay(&context);
+    Graphics_flushBuffer(&context);
+
+    // Draws default booting image
+   Graphics_drawImage(&context, &Default, 0, 0);
+   drawInterface();
+}
+
+// DEMO: needs to be changed
+void drawInterface(void){
+    Graphics_clearDisplay(&context);
+    Graphics_flushBuffer(&context);
+    const Graphics_Rectangle motor1 = {10, 10, 30, 30};
+    const Graphics_Rectangle motor2 = {10, 50, 30, 70};
+    Graphics_fillRectangle(&context, &motor1);
+    Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 40, 18, OPAQUE_TEXT);
+    Graphics_fillRectangle(&context, &motor2);
+    Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 40, 58, OPAQUE_TEXT);
+    __delay_cycles(3000000); // wait 3 seconds
+    Graphics_clearDisplay(&context);
+}
+
+void updateScreen(void){
+    
 }
