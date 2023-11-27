@@ -1,5 +1,5 @@
 #include "screen.h"
-#include "images/images.h"
+#include "pictures/images.h"
 
 // Screen context used for all feedback
 Graphics_Context context; 

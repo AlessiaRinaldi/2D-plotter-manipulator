@@ -71,11 +71,6 @@ void init_servo(void){
     Timer_A_initCompare(TIMER_A2_BASE, &compareConfig_PWM);
 }
 
-/*uint16_t angle_2_duty(uint16_t angle){
-    uint16_t d = angle * (SERVO_DUTY_CYCLE_MAX - SERVO_DUTY_CYCLE_MIN) / 180;
-    return d;
-}*/
-
 void set_pen(){
 
     if(past_pen_position != current_position.pen){
