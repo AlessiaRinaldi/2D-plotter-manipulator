@@ -4,7 +4,7 @@ import serial
 import time
 
 # opening file json
-with open('photo.json', 'r') as file:
+with open('~/2D-plotter-manipulator/Vectorization-bot/photo.json', 'r') as file:
     data = json.load(file)  # data è una lista di subliste
 
 # serial initialization
