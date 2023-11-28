@@ -7,6 +7,9 @@ This file includes the headers for the serial communication between Raspberry an
 
 #include "msp.h"
 #include <driverlib.h>
+//
+#include <ti/devices/msp432p4xx/driverlib/driverlib.h> 
+
 /*
 Set 2D point struct
 */
@@ -16,6 +19,11 @@ typedef struct pos_t{
     uint16_t y;
     bool pen;
 } pos_t;
+
+void UART_init();
+
+
+
 //leggo da rasp e metto in struct
 
 //fare var globali 
