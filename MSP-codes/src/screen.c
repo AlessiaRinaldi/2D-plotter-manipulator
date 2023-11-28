@@ -41,9 +41,7 @@ void drawDefault(void){
 
     // Draws default booting image
     Graphics_drawImage(&context, &Default, 0, 0);
-    int i;
-    for(i = 0; i < 1000; i++){
-        __delay_cycles(10000);
+    for(int i = 0; i < 100; i++){
         updateScreen();
     }
    
@@ -68,17 +66,25 @@ void updateScreen(void){
         isDrawing = true;
         drawInterface();
     }
-    uint8_t startX = 8;
+    uint8_t startX = 11;
     uint8_t startY = 64 + 23;
-    uint16_t numVec = 1000; // dummy num of vectors
+    uint16_t numVec = 100; // dummy num of vectors
     vectorsDrawn++;
     uint8_t percentage = floor(vectorsDrawn * 100 / numVec);
     int8_t buffer[5];
     snprintf((char*)buffer, sizeof(buffer), "%u", percentage);
-    Graphics_Rectangle rect = {0, 105, 70, 128};
+    Graphics_Rectangle rect = {30, 105, 68, 128};
     if(prevPercentage != percentage) {
+        
         prevPercentage = percentage;
-        Graphics_fillRectangleOnDisplay(&g_sCrystalfontz128x128, &rect, 0xFFFF);
+        Graphics_fillRectangleOnDisplay(&g_sCrystalfontz128x128, &rect, bgColor);
+        Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage, startY, startY + 14, 0x07e0);
+        if (percentage == 100) {
+            Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage + 1, startY, startY + 14, 0x07e0);
+            Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage + 2, startY, startY + 14, 0x07e0);
+            Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage + 3, startY, startY + 14, 0x07e0);
+            Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage + 4, startY, startY + 14, 0x07e0);
+        }
     }
-    Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 60, 115, OPAQUE_TEXT);
+    Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 57, 115, OPAQUE_TEXT);
 }
