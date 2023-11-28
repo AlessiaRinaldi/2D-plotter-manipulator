@@ -119,6 +119,26 @@ An additional element of the project involves the Raspberry Pi 0 W for Human Mac
 
 Testing of the platform has been conducted on `Raspbian version 11.0` and later, as well as Ubuntu 22.02 and above. The prerequisites for the runtime environment include a minimum `Python 3.10 version`, and all additional Python package dependencies.
 
+Before installing dependencies, the command pip should be installed: 
+```
+sudo apt install pip 
+```
+In _Raspberry pi 0_ there isn't enough memory space in the directory `/var/cache/apt/archives`, but it's possible to expand the filesystem to SD Card by doing `sudo raspi-config -> Advanced -> Expand Filesystem`.
+It's also possible doing the same from the command line:
+```
+sudo raspi-config --expand-rootfs
+```    
+In order to start the serial communication, there is the need to install the `pyserial` module too:
+```
+pip install pyserial
+```
+In this project, the `/dev/serial0` port is used. It should be enabled before the first running by editing the file `/boot/config.txt`. Add this line in the file:
+
+```
+enable_uart=1
+```
+Reboot the System and then all should be ready.
+
 ### Files Organization
 ```
 ├──  3D-structure

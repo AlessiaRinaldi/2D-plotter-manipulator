@@ -18,11 +18,11 @@ for sublist in data:                    # per ogni sublista di data
         ser.write(message.encode())     # codifica automaticamente il messaggio e lo scrive in seriale 
         print(f'Inviato: {message}')    # debug
         time.sleep(0.5)                 # pausa 
-
+    
     # if sublist is finished -> lift pen
     special_message = '[6666, 6666]'                # cambiare con valore riconoscibile che non sta dentro il workspace
     ser.write(special_message.encode())             # scrive in seriale 
-    print(f'messaggio speciale: {special_message}') #debug
+    print(f'messaggio speciale: {special_message}') # debug
 
 ser.close()     # close serial communication 
 
