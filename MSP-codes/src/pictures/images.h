@@ -7,5 +7,6 @@ This file includes the images structures to be projected on screen
 #include <grlib.h>
 
 extern const Graphics_Image Default;
+extern const Graphics_Image DrawingBar;
 
 #endif

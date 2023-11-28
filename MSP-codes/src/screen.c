@@ -15,7 +15,7 @@ void init_screen(void){
     /* Set screen characteristics
     // Foreground Color for text and drawings on screen
     // Background Color for any untouched pixel
-    // Font for text design - currently set to Cmss 14px Bold
+    // Font for text design - currently set to Cmss 18px Bold
     */ 
     Graphics_setForegroundColor(&context, fgColor);
     Graphics_setBackgroundColor(&context, bgColor);
@@ -51,10 +51,10 @@ void drawInterface(void){
     Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 40, 18, OPAQUE_TEXT);
     Graphics_fillRectangle(&context, &motor2);
     Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 40, 58, OPAQUE_TEXT);
-    __delay_cycles(3000000); // wait 3 seconds
-    Graphics_clearDisplay(&context);
+    Graphics_drawImage(&context, &DrawingBar, 0, 65);
+    Graphics_drawStringCentered(&context, (int8_t*) "0", AUTO_STRING_LENGTH, 64, 115, OPAQUE_TEXT);
 }
 
 void updateScreen(void){
-    
+    int numVec = 1000; // dummy num of vectors
 }
