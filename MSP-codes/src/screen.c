@@ -24,67 +24,53 @@ void init_screen(void){
     vectorsDrawn = 0;
     isDrawing = false;
     prevPercentage = 0;
+
+
     /*
     // Bound to be removed, for testing of font / colors / proportions
     Graphics_drawStringCentered(&context, (int8_t *) "Silent Leges", AUTO_STRING_LENGTH, 64, 64 - (int32_t) Graphics_getFontHeight(font) / 2, OPAQUE_TEXT);
     Graphics_drawStringCentered(&context, (int8_t *) "Inter Arma 123", AUTO_STRING_LENGTH, 64, 64 + (int32_t) Graphics_getFontHeight(font) / 2, OPAQUE_TEXT);
     */
-
-   drawDefault();
-
-}
-
-void drawDefault(void){
+    
     // Make sure nothing is cached for display
     Graphics_clearDisplay(&context);
     Graphics_flushBuffer(&context);
 
     // Draws default booting image
     Graphics_drawImage(&context, &Default, 0, 0);
-    for(int i = 0; i < 100; i++){
-        updateScreen();
-    }
-   
-}
 
-// DEMO: needs to be changed
-void drawInterface(void){
-    Graphics_clearDisplay(&context);
-    Graphics_flushBuffer(&context);
-    const Graphics_Rectangle motor1 = {10, 10, 30, 30};
-    const Graphics_Rectangle motor2 = {74, 10, 94, 30};
-    Graphics_fillRectangle(&context, &motor1);
-    Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 40, 18, OPAQUE_TEXT);
-    Graphics_fillRectangle(&context, &motor2);
-    Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 104, 18, OPAQUE_TEXT);
-    Graphics_drawImage(&context, &DrawingBar, 0, 65);
-    //Graphics_drawStringCentered(&context, &vectorsDrawn, AUTO_STRING_LENGTH, 64, 115, OPAQUE_TEXT);
+    /*for(int i = 0; i < 300; i++){
+        updateScreen();
+    }*/
+
 }
 
 void updateScreen(void){
     if(!isDrawing){
         isDrawing = true;
-        drawInterface();
+        Graphics_clearDisplay(&context);
+        Graphics_flushBuffer(&context);
+        Graphics_fillRectangle(&context, &(Graphics_Rectangle){10, 10, 30, 30});
+        Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 40, 18, OPAQUE_TEXT);
+        Graphics_fillRectangle(&context, &(Graphics_Rectangle){74, 10, 94, 30});
+        Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 104, 18, OPAQUE_TEXT);
+        Graphics_drawImage(&context, &DrawingBar, 0, 65);
+        //Graphics_drawStringCentered(&context, &vectorsDrawn, AUTO_STRING_LENGTH, 64, 115, OPAQUE_TEXT);
     }
-    uint8_t startX = 11;
-    uint8_t startY = 64 + 23;
-    uint16_t numVec = 100; // dummy num of vectors
+    uint16_t numVec = 300; // dummy num of vectors
     vectorsDrawn++;
     uint8_t percentage = floor(vectorsDrawn * 100 / numVec);
-    int8_t buffer[5];
-    snprintf((char*)buffer, sizeof(buffer), "%u", percentage);
-    Graphics_Rectangle rect = {30, 105, 68, 128};
     if(prevPercentage != percentage) {
-        
         prevPercentage = percentage;
+        int8_t buffer[5];
+        snprintf((char*)buffer, sizeof(buffer), "%u", percentage);
+        Graphics_Rectangle rect = {30, 105, 68, 128};
         Graphics_fillRectangleOnDisplay(&g_sCrystalfontz128x128, &rect, bgColor);
         Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage, startY, startY + 14, 0x07e0);
         if (percentage == 100) {
-            Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage + 1, startY, startY + 14, 0x07e0);
-            Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage + 2, startY, startY + 14, 0x07e0);
-            Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage + 3, startY, startY + 14, 0x07e0);
-            Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage + 4, startY, startY + 14, 0x07e0);
+            Graphics_fillRectangleOnDisplay(&g_sCrystalfontz128x128, &(Graphics_Rectangle){startX + percentage +1, startY, startX + percentage + 4, startY + 14}, 0x7e0);
+            Graphics_flushBuffer(&context);
         }
+        Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 57, 115, OPAQUE_TEXT);
     }
-    Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 57, 115, OPAQUE_TEXT);
 }
