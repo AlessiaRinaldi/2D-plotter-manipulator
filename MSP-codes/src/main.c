@@ -18,9 +18,10 @@ int main(void)
 {
     inithw();
 
-    while (1)
-    {
+    while(1){
         MAP_PCM_gotoLPM0();
     }
 }
+
+
 
