@@ -116,7 +116,7 @@ void set_servo(uint16_t duty1, uint16_t duty2){
     } 
 }
 
-uint16_t angle_2_duty(uint16_t angle){
+uint16_t angle_2_duty(float angle){
     // conversion from radians to duty cycle    
     // pi : (SERVO_DUTY_CYCLE_MAX - SERVO_DUTY_CYCLE_MIN) = angle = x
 
@@ -136,14 +136,14 @@ void set_position(pos_t pos){
     uint16_t x = pos.x;
     uint16_t y = pos.y;
 
-    uint16_t hypotenuse = sqrt(pow(x, 2) + pow(y, 2));
-    uint16_t hypotenuse_angle = asin(x / hypotenuse);
+    float hypotenuse = sqrt(pow(x, 2) + pow(y, 2));
+    float hypotenuse_angle = asin(x / hypotenuse);
 
-    uint16_t inner_angle = acos((pow(hypotenuse, 2) + pow(LINK_1, 2) - pow(LINK_2, 2)) / (2 * hypotenuse + LINK_1));            // the acos return the angle in radians
-    uint16_t outer_angle = acos((pow(LINK_1, 2) + pow(LINK_2, 2) - pow(hypotenuse, 2)) / (2 * LINK_1 * LINK_2));
+    float inner_angle = acos((pow(hypotenuse, 2) + pow(LINK_1, 2) - pow(LINK_2, 2)) / (2 * hypotenuse + LINK_1));            // the acos return the angle in radians
+    float outer_angle = acos((pow(LINK_1, 2) + pow(LINK_2, 2) - pow(hypotenuse, 2)) / (2 * LINK_1 * LINK_2));
 
-    uint16_t servo_1_angle = hypotenuse_angle - inner_angle;
-    uint16_t servo_2_angle = 3.14 - outer_angle;
+    float servo_1_angle = hypotenuse_angle - inner_angle;
+    float servo_2_angle = 3.14 - outer_angle;
 
     /*
     Check on workspace, better than this
