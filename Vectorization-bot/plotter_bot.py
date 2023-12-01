@@ -99,6 +99,9 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     # Saves image for review and troubleshooting, but also for vectorization, in PNG format
     cv2.imwrite('images/photo.png', image)
     
+    # Prepares data for image scaling
+    size = image.shape[0:2]
+    
     # Frees memory
     file = None
     obj_file = None
@@ -108,7 +111,7 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text('Image received. Please hold tight for feedback while I process the image.')
     
     # Image Processing
-    await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message)
+    await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message, size = size, bounds = (2.5, -5.0, 15.0, 12.5))
     
     # Saves svg vectorized image as a png for user feedback 
     svg.svg2png(url = 'images/photo.svg', write_to = 'images/vectors.png')

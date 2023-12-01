@@ -23,6 +23,37 @@ except:
 
 # -------------- output functions --------------
 
+async def scale(
+    lines,
+    imgSize,    # formatted as (height, width)
+    bounds      # formatted as (minX, minY, maxX, maxY)
+):
+    
+    minX, minY, maxX, maxY = bounds
+    height, width = imgSize
+
+    # find image aspect ratio to adjust either x or y
+    imgAspectRatio = width / height
+    imageRatioHigher: bool = imgAspectRatio > ((maxX - minX) / (maxY - minY))
+
+    new_lines = []
+    
+    for line in lines:
+        new_lines.append([])
+        for point in range(len(line)):
+            x, y = line[point]
+            
+            if imageRatioHigher:
+                scaleY = ((y / height) * (maxX - minX) / imgAspectRatio) + minY
+                scaleX = ((x /  width) * (maxX - minX)) + minX
+            else:
+                scaleX = ((x /  width) * (maxY - minY) * imgAspectRatio) + minX
+                scaleY = ((y / height) * (maxY - minY)) + minY
+            
+            new_lines[-1].append((scaleX, scaleY))
+    
+    return new_lines
+
 
 async def image_to_json(
     image_filename,
@@ -31,7 +62,9 @@ async def image_to_json(
     repeat_contours=1,
     draw_hatch=False,
     repeat_hatch=1,
-    message: Message = None
+    message: Message = None,
+    bounds = (),
+    size = ()
 ):
 
     global msg
@@ -46,9 +79,10 @@ async def image_to_json(
         repeat_hatch,
     )
 
+    lines = await scale(lines, size, bounds)
+
     filename = json_folder + image_filename + ".json"
     await lines_to_file(lines, filename)
-
 
 async def makesvg(lines):
     await msg.reply_text('Generating svg file...')
