@@ -20,7 +20,7 @@ typedef struct pos_t{
     bool pen;
 } pos_t;
 
-void UART_init();
+void init_UART();
 
 
 
