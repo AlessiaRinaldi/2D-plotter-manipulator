@@ -130,10 +130,23 @@ The same is also achievable through the command line by executing:
 ```
 sudo raspi-config --expand-rootfs
 ```    
-For initiating serial communication, it's necessary to install the `pyserial` using the command:
+
+For initiating serial communication, it's necessary to install the `pyserial` module using the command:
 ```
 pip install pyserial
 ```
+
+Additionally, for booting and usage of the Telegram Bot, several additional modules are needed. 
+
+Tu run the bot, install `python-telegram-bot`, as well as `cairo-svg` for SVG conversion (to display the vectorized image to the user) and `numpy` for serial decoding of the image sent by the user. Execute the following command:
+```
+pip install python-telegram-bot cairosvg numpy
+```
+For the backend image-related processes, the required modules include the headless version of `opencv` for the various processing algorithms and `PIL` for image handling. Install them with the following:
+```
+pip install opencv-python-headless Pillow
+```
+
 In this project, the `/dev/serial0` port is utilized. Before the first run, enable it by editing the file `/boot/config.txt` and add the following line:
 
 ```
@@ -143,20 +156,31 @@ Reboot the system, and everything should be set up and ready for execution.
 
 ### Files Organization
 ```
-├──  3D-structure
-├──  MSP-codes
+.
+├── 3D-structure
+├── MSP-codes
 |   ├── include
 |   ├── lib
-|   |   └── driverlib
+|   |   ├── driverlib
+|   |   ├── Crystalfontz128x128_ST7735
+|   |   └── HAL_MSP_EXP432P401R_Crystalfontz128x128_ST7735
 |   ├── src
+|   |   ├── pictures
+|   |   |   ├── Default.c
+|   |   |   ├── DrawingBar.c
+|   |   |   └── images.h
 |   |   ├── main.c
 |   |   ├── motors.h
 |   |   ├── motors.c
 |   |   ├── communication.h
-|   |   └── communication.c
-|   |   └── init.h
-|   |   └── init.c
+|   |   ├── communication.c
+|   |   ├── screen.h
+|   |   ├── screen.c
+|   |   ├── inithw.h
+|   |   └── inithw.c
 |   └── test
+├── rasp-communication
+|   └── communication_rasp.py
 ├── Vectorization-bot
 |   ├── linedraw.py
 |   └── plotter_bot.py
@@ -171,7 +195,7 @@ The entire group began discussions on the project's core concept starting from t
 
 - Angelo Nutu assumed responsibility for image processing and setting up the Telegram bot [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/Vectorization-Bot/README.md);
 - Alessia Rinaldi took charge of serial communication between the Raspberry Pi and the MSP432 [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
-- Leonardo Pasquato was tasked with designing the 3D structure and managing motor control attenuation for the MSP432 [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
+- Leonardo Pasquato was tasked with designing the 3D structure and managing motor control actuation for the MSP432 [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
 
 <p align="right">( <a href="#top">back to top</a> )</p>
 
