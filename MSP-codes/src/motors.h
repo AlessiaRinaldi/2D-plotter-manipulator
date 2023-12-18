@@ -39,7 +39,7 @@ void set_servo(uint16_t duty1, uint16_t duty2);
 void set_pen();
 
 /**
- * @brief       Overall function, receive positions and set motors
+ * @brief       Overall function, receive positions and set motors angles
  * @param       pos pos_t instance that contains the new position of the pen
 */
 void set_position(pos_t pos);

@@ -111,7 +111,7 @@ void set_servo(uint16_t duty1, uint16_t duty2){
 
         // set elbow
         compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_1;
-        compareConfig_PWM.compareValue = 3000;
+        compareConfig_PWM.compareValue = duty2;
         Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
     } 
 }
