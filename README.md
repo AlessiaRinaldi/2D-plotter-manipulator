@@ -30,8 +30,11 @@
   - [Telegram Bot](#telegram-bot)
   - [Communication and actuation](#communication-and-actuation)
 - [Getting started](#getting-started)
-  - [Files Organization](#files-organization)
-  - [Work Organization](#work-organization)
+  - [Raspberry setup](#raspberry-setup)
+    - [UART communication setup](#uart-communication-setup)
+    - [Telegram bot and vectorialization setup](#telegram-bot-and-vectorialization-setup)
+- [Files Organization](#files-organization)
+- [Work Organization](#work-organization)
 - [Roadmap](#roadmap)
 
 
@@ -106,7 +109,6 @@ The aforementioned communication between the two boards works via UART protocol,
 Here is the working FSM that drives the communication between Raspberry and MSP432 and its actuation:
 
 
-
 ## Getting started
 
 This project is designed for execution on the MSP432 embedded platform, utilizing `Texas Instruments' DriverLib` to operate at a higher abstraction level. While the MSP432 can be programmed using Code Composer Studio, this project has been configured to leverage Visual Studio Code with the `PlatformIO extension` due to more familiarity with the tool.
@@ -117,25 +119,45 @@ To facilitate the integration of the DriverLib into the project, it is included 
 
 To use this project, install PlatformIO on your Visual Studio Code, clone this repository, and open the project from PlatformIO. All the necessary components for the MSP432 board are consolidated here.
 
-An additional element of the project involves the Raspberry Pi 0 W for Human Machine Interaction (HMI). The setup requires the necessary connections for serial communcation between the MSP432 and Raspberry Pi, while it's only required to execute the primary Python script _plotter_bot.py_ to initialize and engage with the Telegram Bot. 
+An additional element of the project involves the Raspberry Pi 0 W for Human Machine Interaction (HMI). The setup requires the necessary connections for serial communcation between the MSP432 and Raspberry Pi, while it's only required to execute the primary Python script _plotter_bot.py_ to initialize and engage with the Telegram Bot.
+
+### Raspberry setup
 
 Testing of the platform has been conducted on `Raspbian version 11.0` and later, as well as Ubuntu 22.02 and above. The prerequisites for the runtime environment include a minimum `Python 3.10 version`, and all additional Python package dependencies.
 
-Before installing dependencies, ensure the `pip` command is installed using the following: 
-```
+Before installing dependencies, ensure that the `pip` command is installed using the following:
+
+``` bash
 sudo apt install pip 
 ```
-On the _Raspberry Pi 0_ there might be insufficient memory space in the directory `/var/cache/apt/archives`. To address the issue, expand the filesystem to SD Card by doing `sudo raspi-config -> Advanced -> Expand Filesystem`.
+On the _Raspberry Pi 0_ there might be insufficient memory space in the directory `/var/cache/apt/archives`. It's possible to solve this issue: expand the filesystem to SD Card (it's recommended to use at least an SD card with at least 8Gb) by doing `sudo raspi-config` ⟶ `Advanced` ⟶ `Expand Filesystem`.
 
 The same is also achievable through the command line by executing:
-```
+
+``` bash
 sudo raspi-config --expand-rootfs
 ```    
 
+#### UART communication setup
+
 For initiating serial communication, it's necessary to install the `pyserial` module using the command:
-```
+
+``` bash
 pip install pyserial
 ```
+
+In this project, the `/dev/serial0` port is utilized. Before the first run, enable it by editing the file `/boot/config.txt`
+
+``` bash
+sudo nano /boot/config.txt
+```
+and append the following line:
+
+```
+enable_uart=1
+```
+
+#### Telegram bot and vectorialization setup
 
 Additionally, for booting and usage of the Telegram Bot, several additional modules are needed. 
 
@@ -144,18 +166,17 @@ Tu run the bot, install `python-telegram-bot`, as well as `cairo-svg` for SVG co
 pip install python-telegram-bot cairosvg numpy
 ```
 For the backend image-related processes, the required modules include the headless version of `opencv` for the various processing algorithms and `PIL` for image handling. Install them with the following:
-```
+
+``` bash
 pip install opencv-python-headless Pillow
 ```
 
-In this project, the `/dev/serial0` port is utilized. Before the first run, enable it by editing the file `/boot/config.txt` and add the following line:
+<br/>
+<br/>
 
-```
-enable_uart=1
-```
 Reboot the system, and everything should be set up and ready for execution.
 
-### Files Organization
+## Files Organization
 ```
 .
 ├── 3D-structure
@@ -190,7 +211,7 @@ Reboot the system, and everything should be set up and ready for execution.
 ```
 
 <!-- Working Organization -->
-### Work Organization
+## Work Organization
 
 The entire group began discussions on the project's core concept starting from the outset of the course, eventually settling on the designing and manfacturing of the 2D pen plotter. Over the subsequent weeks, individual work was precluded, and all decisions related to the project were made collectively. Consequently, tasks were distributed among team members as follows:
 
