@@ -1,4 +1,4 @@
-#include "communication.h"
+/*#include "communication.h"
 
 const eUSCI_UART_ConfigV1 uartConfig = {
     EUSCI_A_UART_CLOCKSOURCE_SMCLK,
@@ -28,4 +28,4 @@ void init_UART(){
 
     //UART enable
     UART_enableModule(EUSCI_A2_BASE);
-}
+}*/
