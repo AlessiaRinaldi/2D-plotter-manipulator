@@ -61,6 +61,9 @@ void EUSCIA2_IRQHandler(void){
             GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0); //accendi led
         }
         GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+
+        
+        Interrupt_disableSleepOnIsrExit();
     }
 }
 
