@@ -134,10 +134,17 @@ int main(void)
     UART_enableInterrupt(EUSCI_A2_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
     Interrupt_enableInterrupt(INT_EUSCIA2);
     Interrupt_enableSleepOnIsrExit();
+    //////////////////////////
+     // Accendi il LED
 
+        // Aggiungi un ritardo di 0.5 secondi
+    for(int i = 0; i< 10000; i++){
+        GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+    }
+    GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0); // Spegni il LED
+    //////////////////////
     while(1)
     {
-        //UART_transmitData(EUSCI_A2_BASE, TXData);
 
         Interrupt_enableSleepOnIsrExit();
         PCM_gotoLPM0InterruptSafe();
@@ -154,11 +161,10 @@ void EUSCIA2_IRQHandler(void)
     if(status & EUSCI_A_UART_RECEIVE_INTERRUPT_FLAG){
         RXData = UART_receiveData(EUSCI_A2_BASE);
 
-        GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0); // Accendi il LED
-
-        // Aggiungi un ritardo di 0.5 secondi
-        __delay_cycles(500000);
-
+        
+        for(int i = 0; i< 10000; i++){
+            GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+        }
         GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0); // Spegni il LED
 
         // Disabilita il controllo del sonno durante l'uscita dall'ISR
