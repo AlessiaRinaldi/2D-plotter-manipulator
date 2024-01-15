@@ -164,7 +164,21 @@ void EUSCIA2_IRQHandler(void){
         // Accendi il LED
         GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
         // Trasmetti esattamente il dato ricevuto
-        UART_transmitData(EUSCI_A2_BASE, RXData);
+        //UART_transmitData(EUSCI_A2_BASE, RXData);
+        //char responseMessage[20];
+        //snprintf(responseMessage, sizeof(responseMessage), "%u\n", RXData);
+        //UART_transmitData(EUSCI_A2_BASE, responseMessage);
+        // Trasmetti la stringa ricevuta
+        char responseMessage[20];
+        snprintf(responseMessage, sizeof(responseMessage), "%u\n", RXData);
+
+        int i = 0;
+        while (responseMessage[i] != '\0')
+        {
+            UART_transmitData(EUSCI_A2_BASE, responseMessage[i]);
+            i++;
+        }
+
         // Spegni il LED dopo la trasmissione
         GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
         Interrupt_disableSleepOnIsrExit();
