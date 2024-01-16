@@ -148,10 +148,13 @@ int main(void){
     // Enable UART module 
     UART_enableModule(EUSCI_A2_BASE);
     // Enabling interrupts 
-    //  UART_enableInterrupt(EUSCI_A2_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
-    //  Interrupt_enableInterrupt(INT_EUSCIA2);
-    //  Interrupt_enableSleepOnIsrExit();
+    UART_enableInterrupt(EUSCI_A2_BASE, EUSCI_A_UART_RECEIVE_INTERRUPT);
+    Interrupt_enableInterrupt(INT_EUSCIA2);
+    Interrupt_enableSleepOnIsrExit();
     UART_transmitData(EUSCI_A2_BASE,0);
+
+    GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+
     while(1){
 
         /*uint8_t tmp = RXData;
@@ -174,12 +177,28 @@ int main(void){
 }
 
 
+// TOCO: try to blink n times the led where n is the number that occurs from uart
+// TODO: check tx
+
 void EUSCIA2_IRQHandler(void){
     uint32_t status = UART_getEnabledInterruptStatus(EUSCI_A2_BASE);
     if(status & EUSCI_A_UART_RECEIVE_INTERRUPT_FLAG){
-        GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
         
         RXData = UART_receiveData(EUSCI_A2_BASE);
+
+        for(int i = 0; i < RXData; i++){
+            for(int j = 0; j < 10000; j++){
+                GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+            }
+            for(int k = 0; k < 10000; k++){
+                GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+            }
+        }
+
+        for(int t = 0; t < 100000; t++){
+            // do nothing
+        }
+
         // Accendi il LED
         
         // Trasmetti esattamente il dato ricevuto
