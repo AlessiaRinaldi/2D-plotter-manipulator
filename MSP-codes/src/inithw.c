@@ -6,10 +6,7 @@
 Graphics_Context context;
 
 void inithw(){
-    /*
-    stop wd timer, disable interrupts and initialize clock system
-    */
-
+   // Halting WDT
     WDT_A_holdTimer();
     Interrupt_disableMaster();
 

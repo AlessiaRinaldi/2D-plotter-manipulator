@@ -125,16 +125,16 @@ uint16_t angle_2_duty(float angle){
 }
 
 
-void set_position(pos_t pos){
+void set_position(pos_t *pos){
 
     /*
     Obtain angles from 2D points
     */
 
-    current_position = pos;             //check this, maybe it's not the right place
+    current_position = *pos;             //check this, maybe it's not the right place
 
-    uint8_t x = pos.x;
-    uint8_t y = pos.y;
+    uint8_t x = pos -> x;
+    uint8_t y = pos -> y;
 
     float hypotenuse = sqrt(pow(x, 2) + pow(y, 2));
     float hypotenuse_angle = asin(x / hypotenuse);
