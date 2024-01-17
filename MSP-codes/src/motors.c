@@ -139,7 +139,7 @@ void set_position(pos_t *pos){
     float hypotenuse = sqrt(pow(x, 2) + pow(y, 2));
     float hypotenuse_angle = asin(x / hypotenuse);
 
-    float inner_angle = acos((pow(hypotenuse, 2) + pow(LINK_1, 2) - pow(LINK_2, 2)) / (2 * hypotenuse + LINK_1));            // the acos return the angle in radians
+    float inner_angle = acos((pow(hypotenuse, 2) + pow(LINK_1, 2) - pow(LINK_2, 2)) / (2 * hypotenuse * LINK_1));            // the acos return the angle in radians
     float outer_angle = acos((pow(LINK_1, 2) + pow(LINK_2, 2) - pow(hypotenuse, 2)) / (2 * LINK_1 * LINK_2));
 
     float servo_1_angle = hypotenuse_angle - inner_angle;
