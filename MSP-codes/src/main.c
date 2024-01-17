@@ -155,10 +155,14 @@ int main(void){
 
     GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
 
+    puts("debug print \n");
+
     while(1){
 
         /*uint8_t tmp = RXData;
-        RXData = UART_receiveData(EUSCI_A0_BASE);
+        RXData = UART_receiveData(EU
+        
+SCI_A0_BASE);
 
         if(RXData != tmp){
             for(int i = 0; i < 1000; i++){
@@ -182,22 +186,27 @@ int main(void){
 
 void EUSCIA2_IRQHandler(void){
     uint32_t status = UART_getEnabledInterruptStatus(EUSCI_A2_BASE);
+    
     if(status & EUSCI_A_UART_RECEIVE_INTERRUPT_FLAG){
-        
+        //int count = 0;
         RXData = UART_receiveData(EUSCI_A2_BASE);
+        //while (count < (int)RXData){
+            if((int)RXData > 3){
+               for(int j = 0; j < 100; j++){
+                    GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+                }
+                for(int k = 0; k < 100; k++){
+                    GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+                } 
+            } 
+            
+            //count++;
+        //}
+        
 
-        for(int i = 0; i < RXData; i++){
-            for(int j = 0; j < 10000; j++){
-                GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
-            }
-            for(int k = 0; k < 10000; k++){
-                GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
-            }
-        }
-
-        for(int t = 0; t < 100000; t++){
+        //for(int t = 0; t < 100; t++){
             // do nothing
-        }
+        //}
 
         // Accendi il LED
         
@@ -207,7 +216,9 @@ void EUSCIA2_IRQHandler(void){
         //snprintf(responseMessage, sizeof(responseMessage), "%u\n", RXData);
         //UART_transmitData(EUSCI_A2_BASE, responseMessage);
         // Trasmetti la stringa ricevuta
-        char responseMessage[20];
+
+
+        /*char responseMessage[20];
         snprintf(responseMessage, sizeof(responseMessage), "%u\n", RXData);
 
         int i = 0;
@@ -216,6 +227,7 @@ void EUSCIA2_IRQHandler(void){
             UART_transmitData(EUSCI_A2_BASE, responseMessage[i]);
             i++;
         }
+        */
 
         // Spegni il LED dopo la trasmissione
         //GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
