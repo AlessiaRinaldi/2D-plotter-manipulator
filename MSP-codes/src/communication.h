@@ -15,8 +15,8 @@ Set 2D point struct
 */
 
 typedef struct pos_t{
-    uint16_t x;
-    uint16_t y;
+    uint8_t x;
+    uint8_t y;
     bool pen;
 } pos_t;
 
