@@ -48,8 +48,8 @@ int main(void){
 
     //GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
 
-    set_servo(1000, 3000);
-    GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
+    set_servo(0, 900);
+    //GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
     for(int i = 0; i < 5000; i++){
 
     }
