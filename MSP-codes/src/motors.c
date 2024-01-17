@@ -133,8 +133,8 @@ void set_position(pos_t pos){
 
     current_position = pos;             //check this, maybe it's not the right place
 
-    uint16_t x = pos.x;
-    uint16_t y = pos.y;
+    uint8_t x = pos.x;
+    uint8_t y = pos.y;
 
     float hypotenuse = sqrt(pow(x, 2) + pow(y, 2));
     float hypotenuse_angle = asin(x / hypotenuse);

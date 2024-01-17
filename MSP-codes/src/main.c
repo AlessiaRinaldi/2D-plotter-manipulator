@@ -155,7 +155,7 @@ int main(void){
 
     GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
 
-    puts("debug print \n");
+    
 
     while(1){
 
