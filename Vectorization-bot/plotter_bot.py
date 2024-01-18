@@ -1,8 +1,3 @@
-#TODO: add connective functionalities for transmission of vector data
-#      dynamic command utilities
-#      feedback utilities
-#      more to come..
-
 import logging
 import numpy as np
 import cairosvg as svg
@@ -90,7 +85,7 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     
     # Gets uploaded image in the third best resolution (hardware optimization reasons)
-    file = await context.bot.get_file(update.message.photo[-3].file_id)
+    file = await context.bot.get_file(update.message.photo[-2].file_id)
     # Saves in primary memory the image data
     obj_file = await file.download_as_bytearray()
     
@@ -111,7 +106,7 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text('Image received. Please hold tight for feedback while I process the image.')
     
     # Image Processing
-    await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message, size = size, bounds = (2.5, -5.0, 15.0, 12.5))
+    await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message, resolution=min(size), size = size, bounds = (5.0, -2.5, 15.0, 7.5))
     
     # Saves svg vectorized image as a png for user feedback 
     svg.svg2png(url = 'images/photo.svg', write_to = 'images/vectors.png')

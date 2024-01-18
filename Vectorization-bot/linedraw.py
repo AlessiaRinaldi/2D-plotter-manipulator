@@ -32,7 +32,34 @@ async def scale(
     minX, minY, maxX, maxY = bounds
     height, width = imgSize
 
-    # find image aspect ratio to adjust either x or y
+    span = maxX - minX
+    f = k = span
+
+    if width > height:
+        k = f * height / width
+    elif width < height:
+        f = width / (height * k)
+
+    scaleX = f / width
+    scaleY = k / height
+
+    new_lines = []
+
+    for line in lines:
+        new_lines.append([])
+        for point in range(len(line)):
+            x, y = line[point]
+            x = x * scaleX + minX
+            y = y * scaleY + minY
+
+            print(f"Scaled X: {x} Scaled Y: {y}")
+            new_lines[-1].append((x*10, y*10))
+
+    #print(f"Height: {height} Width: {width}")
+
+    return new_lines
+
+    """# find image aspect ratio to adjust either x or y
     imgAspectRatio = width / height
     imageRatioHigher: bool = imgAspectRatio > ((maxX - minX) / (maxY - minY))
 
@@ -45,14 +72,17 @@ async def scale(
             
             if imageRatioHigher:
                 scaleY = ((y / height) * (maxX - minX) / imgAspectRatio) + minY
-                scaleX = ((x /  width) * (maxX - minX)) + minX
+                scaleX = ((x /  width) * (maxX - minX)) #+ minX
             else:
-                scaleX = ((x /  width) * (maxY - minY) * imgAspectRatio) + minX
+                scaleX = ((x /  width) * (maxY - minY) * imgAspectRatio) #+ minX
                 scaleY = ((y / height) * (maxY - minY)) + minY
             
-            new_lines[-1].append((scaleX, scaleY))
+            print(f"Scaled X {scaleX} Scaled Y {scaleY}")
+            new_lines[-1].append((scaleX*10, (scaleY-minY)*10))
     
-    return new_lines
+    print(f"Height: {height} Width: {width}")
+
+    return new_lines"""
 
 
 async def image_to_json(
@@ -80,7 +110,9 @@ async def image_to_json(
     )
 
     lines = await scale(lines, size, bounds)
-
+    """f = open(svg_folder + image_filename + ".svg", "w")
+    f.write(await makesvg(lines))
+    f.close()"""
     filename = json_folder + image_filename + ".json"
     await lines_to_file(lines, filename)
 
