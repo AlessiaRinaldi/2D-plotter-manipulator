@@ -18,10 +18,16 @@ try:
             # Definisci i ritardi per num1 e num2
             delay_num1 = 0.5
             delay_num2 = 1.0
+
+            if  num1 == 0:
+                num1 = 1
             message0 = struct.pack('>B', num1)
             ser.write(message0)
             print(f'Inviato: {num1}')
             time.sleep(delay_num1)
+
+            if num2 == 0:
+                num2 = 1
             message1 = struct.pack('>B', num2)
             ser.write(message1)
             print(f'Inviato: {num2}')
