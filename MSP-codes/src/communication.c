@@ -43,34 +43,30 @@ void UART_get_data(pos_t *pos){
 
     // check pen status and spacial mex
     // when special mex occurs change the bool value to its !value
-/*
-    if(!xory){
+    switch (xory) {
+    case 0:
         pos -> x = UART_receiveData(EUSCI_A2_BASE);
         xory++;
-    
-    } else{
+        break;
+    case 1:
         pos -> y = UART_receiveData(EUSCI_A2_BASE);
         xory++;
-    } 
-
-    if(xory == 2){
+    case 2:
         set_position(pos);
-
         xory = 0;
+        break;  
     }
-
-    */
-
-        RXData = UART_receiveData(EUSCI_A2_BASE);
-        if((int)RXData == 0){
-            
-            for (int a =0; a <100; a++) {
-                GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
-            }
-            for (int b =0; b <100; b++) {
-                GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
-            }
+    
+    RXData = UART_receiveData(EUSCI_A2_BASE);
+    if((int)RXData == 0){
+        pos->pen = !pos->pen;
+        for (int a =0; a <100; a++) {
+            GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
         }
+        for (int b =0; b <100; b++) {
+            GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+        }
+    }
     Interrupt_disableSleepOnIsrExit();
 }
 
