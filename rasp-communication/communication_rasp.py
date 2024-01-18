@@ -18,20 +18,19 @@ try:
             # Definisci i ritardi per num1 e num2
             delay_num1 = 0.5
             delay_num2 = 1.0
-            # componente x
             message0 = struct.pack('>B', num1)
             ser.write(message0)
             print(f'Inviato: {num1}')
             time.sleep(delay_num1)
-            # componente y
             message1 = struct.pack('>B', num2)
             ser.write(message1)
             print(f'Inviato: {num2}')
             time.sleep(delay_num2)
-
+        # if sublist is finished -> lift pen
+        num = 0                                       # cambiare con valore riconoscibile che non sta dentro il workspace
+        special_message = struct.pack('>B', num)      # 1 byte 
+        ser.write(special_message)                    # scrive in seriale 
+        print(f'special message: {special_message}')  # debug
 finally:
     # Chiude la connessione seriale alla fine
     ser.close()
-
-
-
