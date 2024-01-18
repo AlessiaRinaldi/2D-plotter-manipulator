@@ -62,7 +62,7 @@ void UART_get_data(pos_t *pos){
     */
 
         RXData = UART_receiveData(EUSCI_A2_BASE);
-        if((int)RXData >= 20){
+        if((int)RXData >= 100){
             
             for (int a =0; a <100; a++) {
                 GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
