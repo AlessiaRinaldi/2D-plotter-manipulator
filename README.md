@@ -33,6 +33,8 @@
   - [Raspberry setup](#raspberry-setup)
     - [UART communication setup](#uart-communication-setup)
     - [Telegram bot and vectorialization setup](#telegram-bot-and-vectorialization-setup)
+  - [Hardware setup](#hardware-setup)
+    - [Servo motors](#servo-motors)
 - [Files Organization](#files-organization)
 - [Work Organization](#work-organization)
 - [Roadmap](#roadmap)
@@ -175,6 +177,25 @@ pip install opencv-python-headless Pillow
 <br/>
 
 Reboot the system, and everything should be set up and ready for execution.
+
+### Hardware setup
+
+#### Servo motors
+For this project Servo motors with medium-high torque are required, in this case `MG996R` are used. These motors have 3 wires: 5V power supply, GND and PWM. Due to the high torque, the pwm should have a peak to peak tension of 5V, but the MSP432 can deliver only a 3.3V PWM. This requirement makes necessary pulling up the pwm signal by using a bjt transistor `S8050` like in the following schematic:
+
+![pullup](readme/pullup.png)
+
+The required motors are 3 and are connected to the MSP432 as this:
+| Servo | MSP432 pin|
+| --- | --- |
+| shoulder | 5.6 |
+| elbow | 2.4 |
+| pen lifter | 2.6 |
+
+These connections are required for the *shoulder* and *elbow* servos, the third is a smaller one and it allows a 3.3V PWM signal.
+
+
+TODO: add photo of the completed project
 
 ## Files Organization
 ```
