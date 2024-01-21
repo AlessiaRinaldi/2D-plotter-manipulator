@@ -85,7 +85,7 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     )
     
     # Gets uploaded image in the third best resolution (hardware optimization reasons)
-    file = await context.bot.get_file(update.message.photo[-2].file_id)
+    file = await context.bot.get_file(update.message.photo[-1].file_id)
     # Saves in primary memory the image data
     obj_file = await file.download_as_bytearray()
     

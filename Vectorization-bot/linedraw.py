@@ -32,7 +32,7 @@ async def scale(
     minX, minY, maxX, maxY = bounds
     height, width = imgSize
 
-    span = maxX - minX
+    """span = maxX - minX
     f = k = span
 
     if width > height:
@@ -53,13 +53,13 @@ async def scale(
             y = y * scaleY + minY
 
             print(f"Scaled X: {x} Scaled Y: {y}")
-            new_lines[-1].append((x*10, y*10))
+            new_lines[-1].append((int(x*10//1), int((y-minY)*10//1)))
 
     #print(f"Height: {height} Width: {width}")
 
-    return new_lines
+    return new_lines"""
 
-    """# find image aspect ratio to adjust either x or y
+    # find image aspect ratio to adjust either x or y
     imgAspectRatio = width / height
     imageRatioHigher: bool = imgAspectRatio > ((maxX - minX) / (maxY - minY))
 
@@ -72,17 +72,17 @@ async def scale(
             
             if imageRatioHigher:
                 scaleY = ((y / height) * (maxX - minX) / imgAspectRatio) + minY
-                scaleX = ((x /  width) * (maxX - minX)) #+ minX
+                scaleX = ((x /  width) * (maxX - minX)) + minX
             else:
-                scaleX = ((x /  width) * (maxY - minY) * imgAspectRatio) #+ minX
+                scaleX = ((x /  width) * (maxY - minY) * imgAspectRatio) + minX
                 scaleY = ((y / height) * (maxY - minY)) + minY
             
             print(f"Scaled X {scaleX} Scaled Y {scaleY}")
-            new_lines[-1].append((scaleX*10, (scaleY-minY)*10))
+            new_lines[-1].append((int(scaleX*10), int((scaleY-minY)*10)))
     
     print(f"Height: {height} Width: {width}")
 
-    return new_lines"""
+    return new_lines
 
 
 async def image_to_json(
