@@ -5,7 +5,7 @@ uint8_t TXData = 1;
 uint8_t RXData = 0;
 
 int xory = 0;
-int count = 0;
+int count = 2;
 
 const eUSCI_UART_ConfigV1 uartConfig = {
     EUSCI_A_UART_CLOCKSOURCE_SMCLK,                 // SMCLK Clock Source
