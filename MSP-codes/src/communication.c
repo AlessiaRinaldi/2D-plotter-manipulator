@@ -5,6 +5,7 @@ uint8_t TXData = 1;
 uint8_t RXData = 0;
 
 int xory = 0;
+int count = 0;
 
 const eUSCI_UART_ConfigV1 uartConfig = {
     EUSCI_A_UART_CLOCKSOURCE_SMCLK,                 // SMCLK Clock Source
@@ -52,14 +53,25 @@ void UART_get_data(pos_t *pos){
         pos -> y = UART_receiveData(EUSCI_A2_BASE);
         xory++;
     case 2:
+        if (count == 1){
+            count++;
+        }
+        if(count == 2) {
+            count = 0;
+            pos->pen = !pos->pen;
+        }
         set_position(pos);
         xory = 0;
-        break;  
+
+        break;
+
     }
     
     RXData = UART_receiveData(EUSCI_A2_BASE);
-    if((int)RXData == 0){
+    if((int)RXData == 255){
         pos->pen = !pos->pen;
+        xory = 0;
+        count++;
         for (int a =0; a <100; a++) {
             GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
         }
