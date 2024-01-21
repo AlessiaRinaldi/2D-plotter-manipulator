@@ -9,13 +9,17 @@ with open('~/2D-plotter-manipulator/Vectorization-bot/photo.json', 'r') as file:
 
 # Inizializzazione della porta seriale
 ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=0)  # rasp pi 0
-
+prev = [255 , 255]
 try:
     for sublist in data:  # per ogni sublista di data
         for numbers in sublist:  # per ogni lista di numeri in sublista
             # Converte i numeri nella lista in interi, se necessario
             num1 = int(numbers[0])
             num2 = int(numbers[1])
+            # Controllo
+            if num1 == prev[0] and num2 == prev[1]:
+                continue
+            prev = numbers
             # Definisci i ritardi per num1 e num2
             delay_num1 = 0.05
             delay_num2 = 0.5
