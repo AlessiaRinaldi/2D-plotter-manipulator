@@ -186,6 +186,8 @@ For this project Servo motors with medium-high torque are required, in this case
 
 <div align = "center"> <img src = "readme/pullup1.png" alt = "Frame01" width = "600"> </div>
 
+![screensim](readme/screensim.png)
+
 The required motors are 3 and are connected to the MSP432 as this:
 | Servo | MSP432 pin|
 | --- | --- |
