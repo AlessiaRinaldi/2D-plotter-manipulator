@@ -13,62 +13,45 @@ Set pwmconfig structs
 
 */
 
-Timer_A_CompareModeConfig compareConfig_PWM = {
-        TIMER_A_CAPTURECOMPARE_REGISTER_3,          // Use CCR3
-        TIMER_A_CAPTURECOMPARE_INTERRUPT_DISABLE,   // Disable CCR interrupt
-        TIMER_A_OUTPUTMODE_RESET_SET,               // Toggle output b
-        SERVO_DUTY_CYCLE_MIN,                       // starting Duty Cycle
+Timer_A_PWMConfig pwm_config_shoulder =
+{
+        TIMER_A_CLOCKSOURCE_SMCLK,
+        TIMER_A_CLOCKSOURCE_DIVIDER_48,
+        1280,
+        TIMER_A_CAPTURECOMPARE_REGISTER_1,
+        TIMER_A_OUTPUTMODE_RESET_SET,
+        32 
 };
 
-const Timer_A_UpModeConfig upConfig = {
-        TIMER_A_CLOCKSOURCE_SMCLK,                  // SMCLK = 3 MhZ
-        TIMER_A_CLOCKSOURCE_DIVIDER_12,             // SMCLK/12 = 250 KhZ
-        5000,                                       // this should be a 20ms period signal
-        TIMER_A_TAIE_INTERRUPT_DISABLE,             // Disable Timer interrupt
-        TIMER_A_CCIE_CCR0_INTERRUPT_DISABLE,        // Disable CCR0 interrupt
-        TIMER_A_DO_CLEAR                            // Clear value
+Timer_A_PWMConfig pwm_config_elbow =
+{
+        TIMER_A_CLOCKSOURCE_SMCLK,
+        TIMER_A_CLOCKSOURCE_DIVIDER_48,
+        1280,
+        TIMER_A_CAPTURECOMPARE_REGISTER_1,
+        TIMER_A_OUTPUTMODE_RESET_SET,
+        78 
 };
-
 /*
 Useful current position counter of the arm and the pen
 */
 pos_t current_position;
 bool past_pen_position;
 
+uint16_t current_duty_shoulder = 0;
+uint16_t current_duty_elbow = 0;
+
 
 void init_servo(void){
-    /* Configures P2.4 to PM_TA0.1 for using Timer PWM to control LED */
-    GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4,
-    GPIO_PRIMARY_MODULE_FUNCTION);
+    // configure 2.4 pin as shoulder pwm
+    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN4,GPIO_PRIMARY_MODULE_FUNCTION);
 
-    /* Configures P2.6 to PM_TA0.3 for using Timer PWM to control LED */
-    GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P2, GPIO_PIN6,
-    GPIO_PRIMARY_MODULE_FUNCTION);
+    // configure 5.6 pin as elbow pwm
+    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P5, GPIO_PIN6,GPIO_PRIMARY_MODULE_FUNCTION);
 
-    /* Configures P5.6 to PM_TA0.4 for using Timer PWM to control LED */
-    GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P5, GPIO_PIN6,
-    GPIO_PRIMARY_MODULE_FUNCTION);
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_shoulder);
+    MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwm_config_elbow);
 
-    /* Configuring Timer_A0 for Up Mode and starting */
-    Timer_A_configureUpMode(TIMER_A0_BASE, &upConfig);
-    Timer_A_startCounter(TIMER_A0_BASE, TIMER_A_UP_MODE);
-
-    /* Configuring Timer_A2 for Up Mode and starting */
-    Timer_A_configureUpMode(TIMER_A2_BASE, &upConfig);
-    Timer_A_startCounter(TIMER_A2_BASE, TIMER_A_UP_MODE);
-
-    /* Initialize compare registers to generate PWM */
-    Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM); // For P2.6
-
-    // For Port 2.4
-    compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_1;
-    compareConfig_PWM.compareValue = 1000;
-    Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
-
-    // For Port 5.6
-    compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_1;
-    compareConfig_PWM.compareValue = 560;
-    Timer_A_initCompare(TIMER_A2_BASE, &compareConfig_PWM);
 }
 
 void set_pen(){
@@ -80,15 +63,15 @@ void set_pen(){
 
         if(current_position.pen == true){
             // the pen must be down
-            compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_3;
-            compareConfig_PWM.compareValue = 500;
-            Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
+            // compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_3;
+            // compareConfig_PWM.compareValue = 500;
+            // Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
 
         } else{
             // the pen must be high
-            compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_3;
-            compareConfig_PWM.compareValue = 2500;
-            Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
+            // compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_3;
+            // compareConfig_PWM.compareValue = 2500;
+            // Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
 
         }
     }
@@ -105,14 +88,14 @@ void set_servo(uint16_t duty1, uint16_t duty2){
     if(duty1 >= SERVO_DUTY_CYCLE_MIN && duty1 <= SERVO_DUTY_CYCLE_MAX && duty2 >= SERVO_DUTY_CYCLE_MIN && duty2 <= SERVO_DUTY_CYCLE_MAX){
 
         // set shoulder
-        compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_1;
-        compareConfig_PWM.compareValue = duty1;
-        Timer_A_initCompare(TIMER_A2_BASE, &compareConfig_PWM);
+        pwm_config_shoulder.dutyCycle = duty1;
+        pwm_config_elbow.dutyCycle = duty2;
+        
+        current_duty_shoulder = pwm_config_shoulder.dutyCycle;
+        MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_shoulder);
 
-        // set elbow
-        compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_1;
-        compareConfig_PWM.compareValue = duty2;
-        Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
+        current_duty_elbow = pwm_config_elbow.dutyCycle;
+        MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwm_config_elbow);      
     } 
 }
 

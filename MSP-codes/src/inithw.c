@@ -15,6 +15,7 @@ void inithw(){
     CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
     CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
     CS_initClockSignal(CS_ACLK, CS_REFOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+    MAP_PCM_setPowerState(PCM_AM_LF_VCORE0);
 
     init_UART();
     init_servo();
