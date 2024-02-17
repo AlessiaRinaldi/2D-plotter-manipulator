@@ -131,8 +131,10 @@ async def confirmation(update: Update, context: ContextTypes.DEFAULT_TYPE) -> in
         # Work in Progress - User has accepted the image which is gonna be sent to the microcontroller for drawing -> TBD
         case 'ul_confirmed':
             await update.callback_query.message.reply_text(
-                text = 'Uploading the data, you will be notified on the status of the printing process!\nNB: This is a work in progress'
+                text = 'The image has been sent to be drawn.\nThank you.'
             )
+            import os
+            os.system('python3 ../rasp-communication/communication_rasp.py')
         # User refused the image so they're prompted to choose whether they want another image or to cancel the operation -> CONFIRMATION state
         case 'ul_denied':
             await update.callback_query.message.reply_text(
