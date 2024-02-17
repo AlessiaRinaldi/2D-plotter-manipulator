@@ -1,3 +1,7 @@
 {
-    "cortex-debug.armToolchainPath": "/home/leo/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin"
+    "cortex-debug.armToolchainPath": "/home/leo/.config/Code/User/globalStorage/bmd.stm32-for-vscode/@xpack-dev-tools/arm-none-eabi-gcc/13.2.1-1.1.1/.content/bin",
+    "files.associations": {
+        "communication.h": "c",
+        "hal_msp_exp432p401r_crystalfontz128x128_st7735.h": "c"
+    }
 }

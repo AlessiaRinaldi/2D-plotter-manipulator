@@ -8,6 +8,8 @@ This file includes the headers for the serial communication between Raspberry an
 #include "msp.h"
 #include <driverlib.h>
 
+bool get_vector = true;
+
 /*
 Set 2D point struct
 */
@@ -22,6 +24,7 @@ void init_UART();
 
 void UART_get_data(pos_t *pos);
 
+void UART_get_vectors(void);
 //leggo da rasp e metto in struct
 
 //fare var globali 

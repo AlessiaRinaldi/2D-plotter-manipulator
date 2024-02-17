@@ -65,8 +65,11 @@ void EUSCIA2_IRQHandler(void){
     uint32_t status = UART_getEnabledInterruptStatus(EUSCI_A2_BASE);
     
     if(status & EUSCI_A_UART_RECEIVE_INTERRUPT_FLAG){
-        UART_get_data(&current_position); //set_position is here
-        
+        if (get_vector){
+            UART_get_vectors();
+        } else {
+            UART_get_data(&current_position); //set_position is here
+        }        
         //set_position(&current_position);
         //int count = 0;
         //RXData = UART_receiveData(EUSCI_A2_BASE);

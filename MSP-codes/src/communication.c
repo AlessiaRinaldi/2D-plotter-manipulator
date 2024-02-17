@@ -1,11 +1,13 @@
 #include "communication.h"
 #include "motors.h"
+#include "screen.h"
 
 uint8_t TXData = 1; 
 uint8_t RXData = 0;
 
 int xory = 0;
 int count = 2;      //starting with lifted pen
+int track = 0; 
 
 const eUSCI_UART_ConfigV1 uartConfig = {
     EUSCI_A_UART_CLOCKSOURCE_SMCLK,                 // SMCLK Clock Source
@@ -72,14 +74,37 @@ void UART_get_data(pos_t *pos){
         pos->pen = !pos->pen;
         xory = 0;
         count++;
-        for (int a =0; a <100; a++) {
+        updateScreen();
+        for (int a = 0; a < 100; a++) {
             GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
         }
-        for (int b =0; b <100; b++) {
+        for (int b = 0; b < 100; b++) {
             GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
         }
     }
     Interrupt_disableSleepOnIsrExit();
 }
 
+void UART_get_vectors(void){
+    RXData = UART_receiveData(EUSCI_A2_BASE);
+    uint16_t multiplier;
 
+    switch (track) {
+    case 0:
+        multiplier = 1;
+        break;
+    case 1:
+        multiplier = 100;
+        break;
+    case 2:
+        multiplier = 10000;
+        get_vector = false;
+        break;
+    default:
+        multiplier = 0;
+        break;
+    }
+
+    numVec += (int) RXData * multiplier;
+    track++;
+}

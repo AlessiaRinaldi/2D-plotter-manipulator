@@ -11,6 +11,23 @@ with open('~/2D-plotter-manipulator/Vectorization-bot/photo.json', 'r') as file:
 ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=0)  # rasp pi 0
 prev = [255 , 255]
 try:
+
+    n_vectors = len(data)
+
+    num3, remainder = divmod(n_vectors, 10000)
+    num2, remainder = divmod(remainder, 100)
+    num1 = remainder
+
+    msg = struct.pack('>B', num1)
+    ser.write(msg)
+    time.sleep(0.05)
+    msg = struct.pack('>B', num2)
+    ser.write(msg)
+    time.sleep(0.05)
+    msg = struct.pack('>B', num3)
+    ser.write(msg)
+    time.sleep(0.05)
+
     for sublist in data:  # per ogni sublista di data
         for numbers in sublist:  # per ogni lista di numeri in sublista
             # Converte i numeri nella lista in interi, se necessario

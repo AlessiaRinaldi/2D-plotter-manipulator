@@ -1,6 +1,7 @@
 #include "screen.h"
 #include "pictures/images.h"
 
+
 void init_screen(void){
 
     // Initialize screen SPI communication
@@ -57,7 +58,7 @@ void updateScreen(void){
         Graphics_drawImage(&context, &DrawingBar, 0, 65);
         //Graphics_drawStringCentered(&context, &vectorsDrawn, AUTO_STRING_LENGTH, 64, 115, OPAQUE_TEXT);
     }
-    uint16_t numVec = 300; // dummy num of vectors
+
     vectorsDrawn++;
     uint8_t percentage = floor(vectorsDrawn * 100 / numVec);
     if(prevPercentage != percentage) {
