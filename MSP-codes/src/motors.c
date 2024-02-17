@@ -22,8 +22,8 @@ Timer_A_CompareModeConfig compareConfig_PWM = {
 
 const Timer_A_UpModeConfig upConfig = {
         TIMER_A_CLOCKSOURCE_SMCLK,                  // SMCLK = 3 MhZ
-        TIMER_A_CLOCKSOURCE_DIVIDER_1,              // SMCLK/12 = 250 KhZ
-        1280,                                      // 40 ms tick period         // last edit, before was 10000 that should corresponds to 40ms
+        TIMER_A_CLOCKSOURCE_DIVIDER_12,             // SMCLK/12 = 250 KhZ
+        5000,                                       // this should be a 20ms period signal
         TIMER_A_TAIE_INTERRUPT_DISABLE,             // Disable Timer interrupt
         TIMER_A_CCIE_CCR0_INTERRUPT_DISABLE,        // Disable CCR0 interrupt
         TIMER_A_DO_CLEAR                            // Clear value
@@ -62,7 +62,7 @@ void init_servo(void){
 
     // For Port 2.4
     compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_1;
-    compareConfig_PWM.compareValue = 200;
+    compareConfig_PWM.compareValue = 1000;
     Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
 
     // For Port 5.6
