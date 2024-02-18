@@ -47,11 +47,10 @@ int main(void){
     //UART_transmitData(EUSCI_A2_BASE,0);
 
     //GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
-
-    set_servo(0, 900);
+        
     //GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
     for(int i = 0; i < 5000; i++){
-
+        // starting delay
     }
 
     while(1){
