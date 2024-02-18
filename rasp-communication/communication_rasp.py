@@ -4,7 +4,7 @@ import time
 import struct
 
 # Apertura del file JSON
-with open('~/2D-plotter-manipulator/Vectorization-bot/photo.json', 'r') as file:
+with open('/home/leonardo/2D-plotter-manipulator/Vectorization-bot/photo.json', 'r') as file:
     data = json.load(file)  # data è una lista di subliste
 
 # Inizializzazione della porta seriale
