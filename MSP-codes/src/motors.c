@@ -32,6 +32,16 @@ Timer_A_PWMConfig pwm_config_elbow =
         TIMER_A_OUTPUTMODE_RESET_SET,
         78 
 };
+
+Timer_A_PWMConfig pwm_config_pen =
+{
+        TIMER_A_CLOCKSOURCE_SMCLK,
+        TIMER_A_CLOCKSOURCE_DIVIDER_48,
+        1280,
+        TIMER_A_CAPTURECOMPARE_REGISTER_3,              // CCR3 for 2.6 pin pwm
+        TIMER_A_OUTPUTMODE_RESET_SET,
+        64
+};
 /*
 Useful current position counter of the arm and the pen
 */
@@ -49,8 +59,12 @@ void init_servo(void){
     // configure 5.6 pin as elbow pwm
     MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P5, GPIO_PIN6,GPIO_PRIMARY_MODULE_FUNCTION);
 
+    // configure 2.6 pin as pen lifter pwm
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN6, GPIO_PRIMARY_MODULE_FUNCTION);
+
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_shoulder);
     MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwm_config_elbow);
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_pen);
 
 }
 
@@ -63,15 +77,13 @@ void set_pen(){
 
         if(current_position.pen == true){
             // the pen must be down
-            // compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_3;
-            // compareConfig_PWM.compareValue = 500;
-            // Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
+            pwm_config_pen.dutyCycle = 4;
+            MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_pen);
 
         } else{
             // the pen must be high
-            // compareConfig_PWM.compareRegister = TIMER_A_CAPTURECOMPARE_REGISTER_3;
-            // compareConfig_PWM.compareValue = 2500;
-            // Timer_A_initCompare(TIMER_A0_BASE, &compareConfig_PWM);
+            pwm_config_pen.dutyCycle = 64;
+            MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_pen);
 
         }
     }
