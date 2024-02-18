@@ -20,7 +20,7 @@ Timer_A_PWMConfig pwm_config_shoulder =
         1280,
         TIMER_A_CAPTURECOMPARE_REGISTER_1,
         TIMER_A_OUTPUTMODE_RESET_SET,
-        32 
+        48 
 };
 
 Timer_A_PWMConfig pwm_config_elbow =
@@ -30,7 +30,7 @@ Timer_A_PWMConfig pwm_config_elbow =
         1280,
         TIMER_A_CAPTURECOMPARE_REGISTER_1,
         TIMER_A_OUTPUTMODE_RESET_SET,
-        78 
+        48
 };
 
 Timer_A_PWMConfig pwm_config_pen =
@@ -137,8 +137,8 @@ void set_position(pos_t *pos){
     float inner_angle = acos((pow(hypotenuse, 2) + pow(LINK_1, 2) - pow(LINK_2, 2)) / (2 * hypotenuse * LINK_1));            // the acos return the angle in radians
     float outer_angle = acos((pow(LINK_1, 2) + pow(LINK_2, 2) - pow(hypotenuse, 2)) / (2 * LINK_1 * LINK_2));
 
-    float servo_1_angle = hypotenuse_angle - inner_angle;
-    float servo_2_angle = 3.14 - outer_angle;
+    float servo_1_angle = hypotenuse_angle - inner_angle + 1.57;
+    float servo_2_angle = 3.14 - outer_angle - 1.57;
 
     /*
     Check on workspace, better than this
