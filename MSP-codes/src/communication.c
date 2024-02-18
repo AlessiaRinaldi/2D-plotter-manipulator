@@ -74,7 +74,7 @@ void UART_get_data(pos_t *pos){
         pos->pen = !pos->pen;
         xory = 0;
         count++;
-        updateScreen();
+        //updateScreen();
         for (int a = 0; a < 100; a++) {
             GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
         }
@@ -85,7 +85,7 @@ void UART_get_data(pos_t *pos){
     Interrupt_disableSleepOnIsrExit();
 }
 
-void UART_get_vectors(void){
+/*void UART_get_vectors(void){
     RXData = UART_receiveData(EUSCI_A2_BASE);
     uint16_t multiplier;
 
@@ -108,3 +108,4 @@ void UART_get_vectors(void){
     numVec += (int) RXData * multiplier;
     track++;
 }
+*/

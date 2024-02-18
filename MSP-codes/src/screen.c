@@ -47,6 +47,7 @@ void init_screen(void){
 }
 
 void updateScreen(void){
+    uint16_t numVec = 300;
     if(!isDrawing){
         isDrawing = true;
         Graphics_clearDisplay(&context);

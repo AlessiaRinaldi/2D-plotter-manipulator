@@ -22,7 +22,7 @@ Graphics_Context context; // Screen context used for all feedback
 uint16_t vectorsDrawn;    // Number of vectors drawn, updated each time function "updateScreen" is called
 bool isDrawing;           // Tracks if the d
 uint8_t prevPercentage;   // 
-int numVec = 0;
+//int numVec = 0;
 
 void init_screen(void);   /* Basic screen setup */
 void updateScreen(void);  /* Main function recalled by interrupt handler */
