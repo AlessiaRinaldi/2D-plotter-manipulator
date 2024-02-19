@@ -5,10 +5,12 @@ import struct
 import math
 
 with open('/home/leonardo/2D-plotter-manipulator/Vectorization-bot/photo.json', 'r') as file:
-    data= json.load(file)
+    data = json.load(file)
 ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=0)
 prev = [255 , 255]
 prev_special = 0
+
+n = 0
 try:
     for sublist in data:
         for numbers in sublist:
@@ -34,28 +36,32 @@ try:
                     prev_special = 1
                 else: 
                     prev_special += 1
-            #else:
-                #if prev_special == 0:
-                    #prev_special = 0
-
 
         num = 255
         if prev_special != num and prev_special != 0:
+            n += 1
             special_message = struct.pack('>B', num)
             ser.write(special_message)
             time.sleep(delay_num2)
             print(f'special message : {special_message}')
+            print(f'Percentage: {n * 100 / len(data)}')
             prev_special = 255
         elif prev_special == 0:
+            n += 1
+            special_message2 = struct.pack('>B', num-1)
+            ser.write(special_message2)
+            time.sleep(delay_num2)
+            print(f'special message : {special_message2}')
+            print(f'Percentage: {n * 100 / len(data)}')
             prev_special = 255
         else: 
             prev_special = 0
 finally: 
     ser.close()
 
-
 # import json
 # import serial
+
 # import time
 # import struct
 
