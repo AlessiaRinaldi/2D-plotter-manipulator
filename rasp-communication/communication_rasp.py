@@ -8,6 +8,7 @@ with open('/home/leonardo/2D-plotter-manipulator/Vectorization-bot/photo.json', 
     data= json.load(file)
 ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=0)
 prev = [255 , 255]
+prev_special = 0
 try:
     for sublist in data:
         for numbers in sublist:
@@ -29,11 +30,26 @@ try:
                 ser.write(message1)
                 print(f'Inviato: {num2}')
                 time.sleep(delay_num2)
+                if prev_special == 254:
+                    prev_special = 1
+                else: 
+                    prev_special += 1
+            #else:
+                #if prev_special == 0:
+                    #prev_special = 0
+
 
         num = 255
-        special_message = struct.pack('>B', num)
-        ser.write(special_message)
-        print(f'special message : {special_message}')
+        if prev_special != num and prev_special != 0:
+            special_message = struct.pack('>B', num)
+            ser.write(special_message)
+            time.sleep(delay_num2)
+            print(f'special message : {special_message}')
+            prev_special = 255
+        elif prev_special == 0:
+            prev_special = 255
+        else: 
+            prev_special = 0
 finally: 
     ser.close()
 
