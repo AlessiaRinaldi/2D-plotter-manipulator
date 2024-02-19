@@ -9,8 +9,8 @@ This file include the header for the management of the Servo motors used for the
 #include <driverlib.h>
 #include "communication.h"
 
-#define SERVO_DUTY_CYCLE_MIN 500
-#define SERVO_DUTY_CYCLE_MAX 5000
+#define SERVO_DUTY_CYCLE_MIN 3
+#define SERVO_DUTY_CYCLE_MAX 100
 #define LINK_1 100
 #define LINK_2 110
 
