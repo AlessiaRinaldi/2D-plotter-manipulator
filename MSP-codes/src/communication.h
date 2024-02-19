@@ -8,7 +8,7 @@ This file includes the headers for the serial communication between Raspberry an
 #include "msp.h"
 #include <driverlib.h>
 
-//bool get_vector = true;
+bool get_vector;
 
 /*
 Set 2D point struct

@@ -106,7 +106,7 @@ async def process(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     await update.message.reply_text('Image received. Please hold tight for feedback while I process the image.')
     
     # Image Processing
-    await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message, resolution=min(size), size = size, bounds = (5.0, -2.5, 15.0, 7.5))
+    await image_to_json('photo', draw_contours = 2, draw_hatch = 16, message = update.message, resolution=min(size), size = size, bounds = (5.0, 0.0, 15.0, 10.0))
     
     # Saves svg vectorized image as a png for user feedback 
     svg.svg2png(url = 'images/photo.svg', write_to = 'images/vectors.png')

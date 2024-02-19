@@ -25,6 +25,7 @@ void init_screen(void){
     vectorsDrawn = 0;
     isDrawing = false;
     prevPercentage = 0;
+    numVec = 0;
 
 
     /*
@@ -42,26 +43,29 @@ void init_screen(void){
 
     /*for(int i = 0; i < 300; i++){
         updateScreen();
-    }*/
+    }/**/
 
 }
 
 void updateScreen(void){
-    uint16_t numVec = 300;
     if(!isDrawing){
         isDrawing = true;
         Graphics_clearDisplay(&context);
         Graphics_flushBuffer(&context);
-        Graphics_fillRectangle(&context, &(Graphics_Rectangle){10, 10, 30, 30});
-        Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 40, 18, OPAQUE_TEXT);
-        Graphics_fillRectangle(&context, &(Graphics_Rectangle){74, 10, 94, 30});
-        Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 104, 18, OPAQUE_TEXT);
+        //Graphics_fillRectangle(&context, &(Graphics_Rectangle){10, 10, 30, 30});
+        //Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 40, 18, OPAQUE_TEXT);
+        //Graphics_fillRectangle(&context, &(Graphics_Rectangle){74, 10, 94, 30});
+        //Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 104, 18, OPAQUE_TEXT);
         Graphics_drawImage(&context, &DrawingBar, 0, 65);
+        int8_t buffer[5];
+        snprintf((char*)buffer, sizeof(buffer), "%u", (uint8_t) 0);
+        Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 57, 115, OPAQUE_TEXT);
         //Graphics_drawStringCentered(&context, &vectorsDrawn, AUTO_STRING_LENGTH, 64, 115, OPAQUE_TEXT);
     }
-
+    numVec = 1147;
     vectorsDrawn++;
     uint8_t percentage = floor(vectorsDrawn * 100 / numVec);
+    //if (vectorsDrawn == 5) percentage++;
     if(prevPercentage != percentage) {
         prevPercentage = percentage;
         int8_t buffer[5];

@@ -40,6 +40,8 @@ void init_UART(){
     UART_transmitData(EUSCI_A2_BASE,0);
 
     GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
+
+    //get_vector = true;
 }
 
 void UART_get_data(pos_t *pos){
@@ -74,13 +76,16 @@ void UART_get_data(pos_t *pos){
         pos->pen = !pos->pen;
         xory = 0;
         count++;
-        //updateScreen();
+        //set_position(pos);
+        updateScreen();
         for (int a = 0; a < 100; a++) {
             GPIO_setOutputHighOnPin(GPIO_PORT_P1, GPIO_PIN0);
         }
         for (int b = 0; b < 100; b++) {
             GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
         }
+    } else if ((int)RXData == 254){
+        updateScreen();
     }
     Interrupt_disableSleepOnIsrExit();
 }
@@ -107,5 +112,4 @@ void UART_get_data(pos_t *pos){
 
     numVec += (int) RXData * multiplier;
     track++;
-}
-*/
+}*/
