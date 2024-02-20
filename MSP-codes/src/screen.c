@@ -43,7 +43,7 @@ void init_screen(void){
 
     /*for(int i = 0; i < 300; i++){
         updateScreen();
-    }/**/
+    }*/
 
 }
 
@@ -56,13 +56,13 @@ void updateScreen(void){
         //Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 40, 18, OPAQUE_TEXT);
         //Graphics_fillRectangle(&context, &(Graphics_Rectangle){74, 10, 94, 30});
         //Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 104, 18, OPAQUE_TEXT);
-        Graphics_drawImage(&context, &DrawingBar, 0, 65);
+        Graphics_drawImage(&context, &DrawingBar, 0, 35);
         int8_t buffer[5];
         snprintf((char*)buffer, sizeof(buffer), "%u", (uint8_t) 0);
-        Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 57, 115, OPAQUE_TEXT);
+        Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 57, 85, OPAQUE_TEXT);
         //Graphics_drawStringCentered(&context, &vectorsDrawn, AUTO_STRING_LENGTH, 64, 115, OPAQUE_TEXT);
     }
-    numVec = 1147;
+    numVec = 300;
     vectorsDrawn++;
     uint8_t percentage = floor(vectorsDrawn * 100 / numVec);
     //if (vectorsDrawn == 5) percentage++;
@@ -70,13 +70,13 @@ void updateScreen(void){
         prevPercentage = percentage;
         int8_t buffer[5];
         snprintf((char*)buffer, sizeof(buffer), "%u", percentage);
-        Graphics_Rectangle rect = {30, 105, 68, 128};
+        Graphics_Rectangle rect = {30, 75, 68, 98};
         Graphics_fillRectangleOnDisplay(&g_sCrystalfontz128x128, &rect, bgColor);
         Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage, startY, startY + 14, 0x07e0);
         if (percentage == 100) {
             Graphics_fillRectangleOnDisplay(&g_sCrystalfontz128x128, &(Graphics_Rectangle){startX + percentage +1, startY, startX + percentage + 4, startY + 14}, 0x7e0);
             Graphics_flushBuffer(&context);
         }
-        Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 57, 115, OPAQUE_TEXT);
+        Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 57, 85, OPAQUE_TEXT);
     }
 }

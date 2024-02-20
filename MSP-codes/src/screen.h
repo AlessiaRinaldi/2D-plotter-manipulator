@@ -16,7 +16,7 @@ This file include the header for the management of the on-screen feedback
 #define fgColor GRAPHICS_COLOR_GOLDENRON     // foreground color, CURRENT: Goldenron
 #define font    g_sFontCmss18b               // font type, CURRENT: Cmss 18px Bold
 #define startX  11                           // progress bar first pixel on X axis
-#define startY  87                           // progress bar first pixel on Y axis
+#define startY  57                           // progress bar first pixel on Y axis
 
 Graphics_Context context; // Screen context used for all feedback
 uint16_t vectorsDrawn;    // Number of vectors drawn, updated each time function "updateScreen" is called
