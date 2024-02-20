@@ -38,7 +38,7 @@ Timer_A_PWMConfig pwm_config_pen =
         TIMER_A_CLOCKSOURCE_SMCLK,
         TIMER_A_CLOCKSOURCE_DIVIDER_48,
         1280,
-        TIMER_A_CAPTURECOMPARE_REGISTER_3,              // CCR3 for 2.6 pin pwm
+        TIMER_A_CAPTURECOMPARE_REGISTER_2,              // CCR2 for 2.5 pin pwm, 2.6 is occupied by the screen
         TIMER_A_OUTPUTMODE_RESET_SET,
         64
 };
@@ -60,7 +60,7 @@ void init_servo(void){
     MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P5, GPIO_PIN6,GPIO_PRIMARY_MODULE_FUNCTION);
 
     // configure 2.6 pin as pen lifter pwm
-    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN6, GPIO_PRIMARY_MODULE_FUNCTION);
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN5, GPIO_PRIMARY_MODULE_FUNCTION);
 
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_shoulder);
     MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwm_config_elbow);
