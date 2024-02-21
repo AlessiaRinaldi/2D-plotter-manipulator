@@ -67,16 +67,22 @@ void updateScreen(void){
     uint8_t percentage = floor(vectorsDrawn * 100 / numVec);
     //if (vectorsDrawn == 5) percentage++;
     if(prevPercentage != percentage) {
-        prevPercentage = percentage;
+        
         int8_t buffer[5];
         snprintf((char*)buffer, sizeof(buffer), "%u", percentage);
         Graphics_Rectangle rect = {30, 75, 68, 98};
         Graphics_fillRectangleOnDisplay(&g_sCrystalfontz128x128, &rect, bgColor);
-        Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage, startY, startY + 14, 0x07e0);
+        if (percentage - prevPercentage == 1) {
+            Graphics_drawVerticalLineOnDisplay(&g_sCrystalfontz128x128, startX + percentage, startY, startY + 14, 0x07e0);
+        } else {
+            Graphics_Rectangle rec = {startX + prevPercentage + 1, startX + percentage, startY, startY + 14};
+            Graphics_fillRectangleOnDisplay(&g_sCrystalfontz128x128, &rec, 0x7e0);
+        }
         if (percentage == 100) {
             Graphics_fillRectangleOnDisplay(&g_sCrystalfontz128x128, &(Graphics_Rectangle){startX + percentage +1, startY, startX + percentage + 4, startY + 14}, 0x7e0);
             Graphics_flushBuffer(&context);
         }
         Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 57, 85, OPAQUE_TEXT);
+        prevPercentage = percentage;
     }
 }
