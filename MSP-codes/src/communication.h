@@ -10,10 +10,6 @@ This file includes the headers for the serial communication between Raspberry an
 
 bool get_vector;
 
-/*
-Set 2D point struct
-*/
-
 typedef struct pos_t{
     uint8_t x;
     uint8_t y;
@@ -24,11 +20,6 @@ void init_UART();
 
 void UART_get_data(pos_t *pos);
 
-//void UART_get_vectors(void);
-//leggo da rasp e metto in struct
+void UART_get_vectors(void);
 
-//fare var globali 
-
-//void init_communication();
-//pos_t getpos();  prendere posizione x e y
 #endif

@@ -20,8 +20,8 @@ This file include the header for the management of the on-screen feedback
 
 Graphics_Context context; // Screen context used for all feedback
 uint16_t vectorsDrawn;    // Number of vectors drawn, updated each time function "updateScreen" is called
-bool isDrawing;           // Tracks if the d
-uint8_t prevPercentage;   // 
+bool isDrawing;   
+uint8_t prevPercentage; 
 int numVec;
 
 void init_screen(void);   /* Basic screen setup */

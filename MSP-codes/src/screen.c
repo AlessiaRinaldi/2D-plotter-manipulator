@@ -26,13 +26,6 @@ void init_screen(void){
     isDrawing = false;
     prevPercentage = 0;
     numVec = 0;
-
-
-    /*
-    // Bound to be removed, for testing of font / colors / proportions
-    Graphics_drawStringCentered(&context, (int8_t *) "Silent Leges", AUTO_STRING_LENGTH, 64, 64 - (int32_t) Graphics_getFontHeight(font) / 2, OPAQUE_TEXT);
-    Graphics_drawStringCentered(&context, (int8_t *) "Inter Arma 123", AUTO_STRING_LENGTH, 64, 64 + (int32_t) Graphics_getFontHeight(font) / 2, OPAQUE_TEXT);
-    */
     
     // Make sure nothing is cached for display
     Graphics_clearDisplay(&context);
@@ -41,31 +34,22 @@ void init_screen(void){
     // Draws default booting image
     Graphics_drawImage(&context, &Default, 0, 0);
 
-    /*for(int i = 0; i < 300; i++){
-        updateScreen();
-    }*/
-
 }
 
+// Updates screen percentage if enough vectors have been drawn to increase it
 void updateScreen(void){
     if(!isDrawing){
         isDrawing = true;
         Graphics_clearDisplay(&context);
         Graphics_flushBuffer(&context);
-        //Graphics_fillRectangle(&context, &(Graphics_Rectangle){10, 10, 30, 30});
-        //Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 40, 18, OPAQUE_TEXT);
-        //Graphics_fillRectangle(&context, &(Graphics_Rectangle){74, 10, 94, 30});
-        //Graphics_drawStringCentered(&context, (int8_t*) ":", AUTO_STRING_LENGTH, 104, 18, OPAQUE_TEXT);
         Graphics_drawImage(&context, &DrawingBar, 0, 35);
         int8_t buffer[5];
         snprintf((char*)buffer, sizeof(buffer), "%u", (uint8_t) 0);
         Graphics_drawStringCentered(&context, &buffer[0], AUTO_STRING_LENGTH, 57, 85, OPAQUE_TEXT);
-        //Graphics_drawStringCentered(&context, &vectorsDrawn, AUTO_STRING_LENGTH, 64, 115, OPAQUE_TEXT);
     }
-    numVec = 3;
     vectorsDrawn++;
     uint8_t percentage = floor(vectorsDrawn * 100 / numVec);
-    //if (vectorsDrawn == 5) percentage++;
+
     if(prevPercentage != percentage) {
         
         int8_t buffer[5];

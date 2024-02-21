@@ -40,14 +40,10 @@ void init_UART(){
     UART_transmitData(EUSCI_A2_BASE,0);
 
     GPIO_setOutputLowOnPin(GPIO_PORT_P1, GPIO_PIN0);
-
-    //get_vector = true;
 }
-
+// get positions and pen status from raspberry pi 0
 void UART_get_data(pos_t *pos){
 
-    // check pen status and spacial mex
-    // when special mex occurs change the bool value to its !value
     switch (xory) {
     case 0:
         pos -> x = UART_receiveData(EUSCI_A2_BASE);
@@ -89,11 +85,11 @@ void UART_get_data(pos_t *pos){
     }
     Interrupt_disableSleepOnIsrExit();
 }
-// receive vector number from 
-/*void UART_get_vectors(void){
+// receive vector number from vectorization
+void UART_get_vectors(void){
     RXData = UART_receiveData(EUSCI_A2_BASE);
     uint16_t multiplier;
-
+    
     switch (track) {
     case 0:
         multiplier = 1;
@@ -112,4 +108,4 @@ void UART_get_data(pos_t *pos){
 
     numVec += (int) RXData * multiplier;
     track++;
-}*/
+}

@@ -3,8 +3,8 @@ import serial
 import time
 import struct
 import math
-
-with open('/home/leonardo/2D-plotter-manipulator/Vectorization-bot/photo.json', 'r') as file:
+# open .json file
+with open('/home/leonardo/2D-plotter-manipulator/Vectorization-bot/images/photo.json', 'r') as file:
     data = json.load(file)
 ser = serial.Serial('/dev/serial0', baudrate=9600, timeout=0)
 prev = [255 , 255]
@@ -12,6 +12,28 @@ prev_special = 0
 
 n = 0
 try:
+
+    n_vectors = len(data)
+
+    num3, remainder = divmod(n_vectors, 10000)
+    num2, remainder = divmod(remainder, 100)
+    num1 = remainder
+
+    # send vector number 
+    msg = struct.pack('>B', num1)
+    ser.write(msg)
+    print(f'vector: {num1}')
+    time.sleep(0.05)
+    msg = struct.pack('>B', num2)
+    ser.write(msg)
+    print(f'vector: {num2}')
+    time.sleep(0.05)
+    msg = struct.pack('>B', num3)
+    ser.write(msg)
+    print(f'vector: {num3}')
+    time.sleep(0.05)
+
+    # send positions and status pen
     for sublist in data:
         for numbers in sublist:
             num1 = int(numbers[0])

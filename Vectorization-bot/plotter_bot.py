@@ -11,10 +11,6 @@ from telegram.ext import ContextTypes, Application, CommandHandler, MessageHandl
 
 Username: Final = '@pen_plotter_bot'
 Token: Final = '6617301227:AAGX9f5d5BvC66KXAy0_EKVXuuOltDIiJtQ' 
-Ohearn = ['https://media.tenor.com/IX3oamddJ9cAAAAC/starwell-baby-don%27t-hurt-me.gif',
-          'https://media.tenor.com/GUhnxCpzr78AAAAC/mike-ohearn-baby-dont-hurt-me.gif',
-          'https://media.tenor.com/gfz3LnymsS4AAAAd/baby-dont-hurt-me-meme.gif',
-          'https://media.tenor.com/aF9g0BotesYAAAAM/mike-o-heam-sigma-male.gif']
 
 WAIT, UPLOAD, CONFIRMATION = range(3)
 
@@ -50,11 +46,11 @@ async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     
     return WAIT
 
-# WAIT component: what is love -> WAIT state
-async def mike(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
-    await context.bot.sendDocument(
-        chat_id = update.message.chat_id,
-        document = Ohearn[randint(0, len(Ohearn) - 1)]
+# WAIT component: refuse message -> WAIT state
+async def refuse(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    await context.bot.send_message(
+        chat_id = update.effective_chat.id,
+        text = 'Please use a command.'
     )
     
     return WAIT
@@ -177,7 +173,7 @@ if __name__ == "__main__":
         # - CONFIRMATION: handles all user confirmation (picture is correct, vectorized image is to their liking, they want to start the drawing process)
         states = {
             WAIT: [
-                MessageHandler(~filters.COMMAND, mike),
+                MessageHandler(~filters.COMMAND, refuse),
                 CommandHandler('upload', upload)
             ],
             UPLOAD: [

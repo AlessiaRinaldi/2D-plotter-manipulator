@@ -62,8 +62,8 @@ void init_servo(void){
     // configure 2.6 pin as pen lifter pwm
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN5, GPIO_PRIMARY_MODULE_FUNCTION);
 
-    //MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_shoulder);
-    //MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwm_config_elbow);
+    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_shoulder);
+    MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwm_config_elbow);
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_pen);
 
 }
@@ -148,6 +148,6 @@ void set_position(pos_t *pos){
         // set servo
         uint16_t duty1 = angle_2_duty(servo_1_angle);
         uint16_t duty2 = angle_2_duty(servo_2_angle);
-        set_servo(duty1, duty2);            // consider set_servo(duty1, duty2, pen); without relying in the global var
+        set_servo(duty1, duty2);
     }
 }
