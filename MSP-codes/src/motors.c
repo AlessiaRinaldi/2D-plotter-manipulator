@@ -59,7 +59,7 @@ void init_servo(void){
     // configure 5.6 pin as elbow pwm
     MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(GPIO_PORT_P5, GPIO_PIN6,GPIO_PRIMARY_MODULE_FUNCTION);
 
-    // configure 2.6 pin as pen lifter pwm
+    // configure 2.5 pin as pen lifter pwm
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN5, GPIO_PRIMARY_MODULE_FUNCTION);
 
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_shoulder);

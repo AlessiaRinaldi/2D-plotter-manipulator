@@ -51,22 +51,7 @@ In contrast to the conventional Cartesian structure commonly found in 3D printer
 Users are prompted to effortlessly upload their desired images to our <a href = "https://web.telegram.org/k/#@pen_plotter_bot">Telegram bot</a>, which proceeds to carry out a vectorization process, resulting in a comprehensive `JSON` file containing vectors.
 Following the image vectorization process, the `JSON` document will detail the exact positions determined to be followed by the manipulator. This document will be available in the Raspberry pi Zero memory and a serial communication between the `Raspberry` and the `MSP432` will enable the line-to-line interpretation of the file by the second one. Then the `MSP432` will compute the motor angles starting by the positions read and will actuate them to carry out the movement
 
-<!--Following the image vectorization process, a text document will detail the exact positions determined to be followed by the manipulator, which, once interpreted by the `MSP432 microcontroller`, will be computed into motor angles necessary to carry out the movement.
--->
-
 <p align="right">(<a href="#top"> back to top </a>)</p>
-
-
-
-<!-- ### Built With
-
-* ![C](https://img.shields.io/badge/c-%2300599C.svg?style=for-the-badge&logo=c&logoColor=white)
-* ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-* ![Raspberry Pi](https://img.shields.io/badge/-RaspberryPi-C51A4A?style=for-the-badge&logo=Raspberry-Pi)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p> -->
-
-
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
@@ -97,10 +82,6 @@ Our interface of choice for users looking to convert their chosen image into a d
 
 These algorithms work alongside contouring techniques shaping distinct forms and structures within the image. Line sorting is then employed to organize the details. The outcome is a meticulously processed, vectorized image prepared for submission to the microcontroller. Throughout this process, the Telegram bot provides real-time updates on the processing status, and furthermore submits the vectorized image to the user for confirmation.
 
-We've included a visual representation of the state machine to make things clearer:
-
-**TBD**
-
 <br/>
 
 ### Communication and actuation
@@ -108,9 +89,6 @@ We've included a visual representation of the state machine to make things clear
 Following the image processing, the Telegram bot proceeds to save a `.json` file in a common folder included in the Raspberry Pi memory, encapsulating the vectors that constitute the image. The file is then parsed by another `Python` script, which extracts vector points. Those are then individually communicated to the MSP432.
 
 The aforementioned communication between the two boards works via UART protocol, and upon receiving these points the MSP432 coordinates the movement of the servomotors to the specified position.
-
-Here is the working FSM that drives the communication between Raspberry and MSP432 and its actuation:
-
 
 ## Getting started
 
@@ -175,7 +153,6 @@ pip install opencv-python-headless Pillow
 ```
 
 <br/>
-<br/>
 
 Reboot the system, and everything should be set up and ready for execution.
 
@@ -189,12 +166,12 @@ The required motors are 3 and are connected to the MSP432 as this:
 | --- | --- | --- |
 | shoulder | MG996R | 5.6 |
 | elbow | MG996R | 2.4 |
-| pen lifter | SG90 | 2.6 |
+| pen lifter | SG90 | 2.5 |
 
 The pull-up circuit is required for the *shoulder* and *elbow* servos, the third is a smaller one and it allows a 3.3V PWM signal.
 
 ### Raspberry and MSP432 wiring
-The UART connection between MSP432 and Raspberry pi 0 requires one wire only, because in this case the transmission is mono-directional. The transmitter must be the Raspberry and the receiver the MSP432 by following the next connections:
+The UART connection between MSP432 and Raspberry pi 0 requires only one wire, since in this case the transmission is mono-directional. The transmitter must be the Raspberry and the receiver the MSP432 accordingly to the following connections:
 
 | Raspberry | MSP432 |
 | --- | --- |
@@ -204,7 +181,9 @@ Where the pinout schematic of the raspberry is:
 
 <div align = "center"> <img src = "readme/rasp.jpg" alt = "Frame01" width = "700"> </div>
 
-TODO: add photo of the completed project
+## Finished project
+
+<div align = "center"> <img src = "readme/project.jpg" alt = "Project" width = "700"> </div>
 
 ## Files Organization
 ```
@@ -216,24 +195,24 @@ TODO: add photo of the completed project
 |   |   ├── driverlib
 |   |   ├── Crystalfontz128x128_ST7735
 |   |   └── HAL_MSP_EXP432P401R_Crystalfontz128x128_ST7735
-|   ├── src
-|   |   ├── pictures
-|   |   |   ├── Default.c
-|   |   |   ├── DrawingBar.c
-|   |   |   └── images.h
-|   |   ├── main.c
-|   |   ├── motors.h
-|   |   ├── motors.c
-|   |   ├── communication.h
-|   |   ├── communication.c
-|   |   ├── screen.h
-|   |   ├── screen.c
-|   |   ├── inithw.h
-|   |   └── inithw.c
-|   └── test
+|   └── src
+|       ├── pictures
+|       |   ├── Default.c
+|       |   ├── DrawingBar.c
+|       |   └── images.h
+|       ├── main.c
+|       ├── motors.h
+|       ├── motors.c
+|       ├── communication.h
+|       ├── communication.c
+|       ├── screen.h
+|       ├── screen.c
+|       ├── inithw.h
+|       └── inithw.c
 ├── rasp-communication
 |   └── communication_rasp.py
 ├── Vectorization-bot
+|   ├── images
 |   ├── linedraw.py
 |   └── plotter_bot.py
 └── README.md
@@ -245,32 +224,22 @@ TODO: add photo of the completed project
 
 The entire group began discussions on the project's core concept starting from the outset of the course, eventually settling on the designing and manfacturing of the 2D pen plotter. Over the subsequent weeks, individual work was precluded, and all decisions related to the project were made collectively. Consequently, tasks were distributed among team members as follows:
 
-- Angelo Nutu assumed responsibility for image processing and setting up the Telegram bot [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/Vectorization-Bot/README.md);
-- Alessia Rinaldi took charge of serial communication between the Raspberry Pi and the MSP432 [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
-- Leonardo Pasquato was tasked with designing the 3D structure and managing motor control actuation for the MSP432 [more](https://github.com/AlessiaRinaldi/2D-plotter-manipulator/tree/main/MSP-codes);
+- Angelo Nutu assumed responsibility for image processing, setting up the Telegram bot and feedback screen;
+- Alessia Rinaldi took charge of serial communication between the Raspberry Pi and the MSP432;
+- Leonardo Pasquato was tasked with designing the 3D structure and managing motor control actuation for the MSP432;
 
 <p align="right">( <a href="#top">back to top</a> )</p>
 
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Telegram Bot
-- [ ] Point-to-Point connection
-    - [ ] Protocol implementation
-    - [ ] Transmission 
-- [ ] Motor control
-    - [ ] Serial connection between microcontroller and wi-fi module
-    - [ ] Math implementation
-    - [ ] Motor PWM definition
-- [ ] Working organization
+- [X] Telegram Bot
+- [X] Point-to-Point connection
+    - [X] Protocol implementation
+    - [X] Transmission 
+- [X] Motor control
+    - [X] Math implementation
+    - [X] Motor PWM definition
+- [X] Feedback screen
 
 <p align="right">( <a href="#top">back to top</a> )</p>
-
-<!-- ACKNOWLEDGMENTS -->
-<!--## Acknowledgments
-
-* []()
-* []()
-* []()
-
-<p align="right">(<a href="#top">back to top</a>)</p> Per librerie specifiche e citazioni varie, direi formale e carino da fare ma si vede alla fine -->
