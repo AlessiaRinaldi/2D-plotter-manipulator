@@ -182,18 +182,14 @@ Reboot the system, and everything should be set up and ready for execution.
 ### Hardware setup
 
 #### Servo motors
-For this project Servo motors with medium-high torque are required, in this case `MG996R` are used. These motors have 3 wires: 5V power supply, GND and PWM. Due to the high torque, the pwm should have a peak to peak tension of 5V, but the MSP432 can deliver only a 3.3V PWM. This requirement makes necessary pulling the PWM up by using, in this case, a N-MOS, such as the `BSS138` like in the next schematic:
 
-<div align = "center"> <img src = "readme/pullup1.png" alt = "Frame01" width = "600"> </div>
-
-![screensim](readme/screensim.png)
 
 The required motors are 3 and are connected to the MSP432 as this:
-| Servo | MSP432 pin|
-| --- | --- |
-| shoulder | 5.6 |
-| elbow | 2.4 |
-| pen lifter | 2.6 |
+| Servo reference name | Servo type | MSP432 pin|
+| --- | --- | --- |
+| shoulder | MG996R | 5.6 |
+| elbow | MG996R | 2.4 |
+| pen lifter | SG90 | 2.6 |
 
 The pull-up circuit is required for the *shoulder* and *elbow* servos, the third is a smaller one and it allows a 3.3V PWM signal.
 
