@@ -62,8 +62,8 @@ void init_servo(void){
     // configure 2.6 pin as pen lifter pwm
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(GPIO_PORT_P2, GPIO_PIN5, GPIO_PRIMARY_MODULE_FUNCTION);
 
-    MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_shoulder);
-    MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwm_config_elbow);
+    //MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_shoulder);
+    //MAP_Timer_A_generatePWM(TIMER_A2_BASE, &pwm_config_elbow);
     MAP_Timer_A_generatePWM(TIMER_A0_BASE, &pwm_config_pen);
 
 }
@@ -137,7 +137,7 @@ void set_position(pos_t *pos){
     float inner_angle = acos((pow(hypotenuse, 2) + pow(LINK_1, 2) - pow(LINK_2, 2)) / (2 * hypotenuse * LINK_1));            // the acos return the angle in radians
     float outer_angle = acos((pow(LINK_1, 2) + pow(LINK_2, 2) - pow(hypotenuse, 2)) / (2 * LINK_1 * LINK_2));
 
-    float servo_1_angle = hypotenuse_angle - inner_angle + 1.57;
+    float servo_1_angle = hypotenuse_angle - inner_angle + 1.57/2;
     float servo_2_angle = 3.14 - outer_angle - 1.57;
 
     /*

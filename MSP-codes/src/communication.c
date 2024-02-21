@@ -89,7 +89,7 @@ void UART_get_data(pos_t *pos){
     }
     Interrupt_disableSleepOnIsrExit();
 }
-
+// receive vector number from 
 /*void UART_get_vectors(void){
     RXData = UART_receiveData(EUSCI_A2_BASE);
     uint16_t multiplier;
