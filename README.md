@@ -10,7 +10,7 @@
   <p align = "center">
     A Computer-Vision-based IoT robotic arm with pen plotting functionalities
     <br />
-    <a href="https://www.youtube.com/watch?v=2bIokQEKmMY"><strong>Watch the demo »</strong></a>
+    <a href="https://drive.google.com/file/d/1LAqIMSbVnsYpsb-NP7bkUvp38VYiv7PE/view?usp=drive_link"><strong>Watch the demo »</strong></a>
     <br />
     <br />
     <h6>
@@ -164,8 +164,8 @@ Reboot the system, and everything should be set up and ready for execution.
 The required motors are 3 and are connected to the MSP432 as this:
 | Servo reference name | Servo type | MSP432 pin|
 | --- | --- | --- |
-| shoulder | MG996R | 5.6 |
-| elbow | MG996R | 2.4 |
+| shoulder | MG996R | 2.4 |
+| elbow | MG996R | 5.6 |
 | pen lifter | SG90 | 2.5 |
 
 The pull-up circuit is required for the *shoulder* and *elbow* servos, the third is a smaller one and it allows a 3.3V PWM signal.
